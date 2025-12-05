@@ -1,4 +1,7 @@
 export * from './accounts'
+export * from './modpacks'
+export * from './mods'
 export * from './sessions'
+export * from './tags'
 export * from './users'
 export * from './verifications'
