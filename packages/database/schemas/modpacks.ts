@@ -14,6 +14,7 @@ export const modpacks = pgTable('modpacks', {
     .notNull()
     .references(() => users.id),
   isPublic: boolean('is_public').default(false).notNull(),
+  isActive: boolean('is_active').default(true).notNull(),
   createdAt,
   updatedAt,
 })
@@ -28,6 +29,7 @@ export const modpacksMembers = pgTable('modpacks_members', {
   userId: uuid('user_id')
     .notNull()
     .references(() => users.id),
+  isActive: boolean('is_active').default(true).notNull(),
   permission: text('permission').array().notNull(),
   createdAt,
   updatedAt,
