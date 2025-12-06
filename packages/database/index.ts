@@ -4,7 +4,7 @@ import { env } from './env'
 import * as schemas from './schemas'
 
 export { migrateDatabase } from './migrate'
+export * from './repository'
 
-console.log('Database URL:', env.DATABASE_URL)
 const client = new SQL(env.DATABASE_URL)
 export const database = drizzle({ client, schema: schemas })
