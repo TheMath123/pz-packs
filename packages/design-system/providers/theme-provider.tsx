@@ -20,6 +20,7 @@ export function ThemeProvider(props: ThemeProviderProps) {
   const { defaultTheme, children } = props
   const [theme, setTheme] = useLocalStorageState('theme', defaultTheme)
 
+  console.log('theme', theme)
   const toggleTheme = React.useCallback(() => {
     setTheme((theme) => (theme === 'dark' ? 'light' : 'dark'))
   }, [setTheme])

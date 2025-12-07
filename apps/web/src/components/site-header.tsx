@@ -7,7 +7,7 @@ import { auth } from '@/lib/auth'
 export function SiteHeader() {
   return (
     <header className="container flex justify-end items-center my-4">
-      <nav className="flex gap-3 items-center">
+      <nav className="flex flex-row gap-3 items-center">
         <ThemeButton />
         <UserMenu />
       </nav>
@@ -18,7 +18,7 @@ export function SiteHeader() {
 function ThemeButton() {
   const { toggleTheme } = useTheme()
   return (
-    <Button onClick={toggleTheme} variant="ghost">
+    <Button onClick={toggleTheme} variant="ghost" size="icon">
       <Theme className="size-4.5" />
     </Button>
   )
@@ -44,9 +44,17 @@ function UserMenu() {
   }
 
   return (
-    <Button onClick={() => auth.signOut()}>
-      <LogOut />
-      Logout
-    </Button>
+    <div className="flex flex-row gap-2 items-center">
+      <img
+        src={data.user.image ?? ''}
+        alt={data.user.name ?? undefined}
+        className="rounded-radius w-8 h-8 border-2 border-border shadow"
+      />
+      <span className="font-medium">{data.user.name}</span>
+      <Button onClick={() => auth.signOut()}>
+        <LogOut />
+        Logout
+      </Button>
+    </div>
   )
 }
