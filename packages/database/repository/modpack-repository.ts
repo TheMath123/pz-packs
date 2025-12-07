@@ -1,7 +1,25 @@
-import { and, eq } from 'drizzle-orm'
+import { and, asc, desc, eq, ilike, inArray, or, sql } from 'drizzle-orm'
 import { database } from '../index'
 import type { DModpack, DModpackMember } from '../schemas'
 import { modpacks, modpacksMembers } from '../schemas'
+
+export interface PaginationParams {
+  page: number
+  limit: number
+  search?: string
+  sortBy?: 'createdAt' | 'updatedAt' | 'name'
+  sortOrder?: 'asc' | 'desc'
+}
+
+export interface PaginatedResult<T> {
+  data: T[]
+  pagination: {
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+  }
+}
 
 export interface CreateModpackData {
   name: string
@@ -229,6 +247,138 @@ export class ModpackRepository {
     return members
       .filter((member) => member.modpack.isActive)
       .map((member) => member.modpack)
+  }
+
+  /**
+   * Find public modpacks with pagination and filters
+   */
+  async findPublicPaginated(
+    params: PaginationParams,
+  ): Promise<PaginatedResult<DModpack>> {
+    const {
+      page,
+      limit,
+      search,
+      sortBy = 'createdAt',
+      sortOrder = 'desc',
+    } = params
+    const offset = (page - 1) * limit
+
+    // Build where conditions
+    const whereConditions = [
+      eq(modpacks.isPublic, true),
+      eq(modpacks.isActive, true),
+    ]
+
+    if (search) {
+      whereConditions.push(ilike(modpacks.name, `%${search}%`))
+    }
+
+    // Build order by
+    const orderByColumn = modpacks[sortBy]
+    const orderByFn = sortOrder === 'asc' ? asc : desc
+
+    // Get total count
+    const [{ count }] = await database
+      .select({ count: sql<number>`cast(count(*) as integer)` })
+      .from(modpacks)
+      .where(and(...whereConditions))
+
+    // Get paginated data
+    const data = await database.query.modpacks.findMany({
+      where: and(...whereConditions),
+      orderBy: orderByFn(orderByColumn),
+      limit,
+      offset,
+    })
+
+    return {
+      data,
+      pagination: {
+        page,
+        limit,
+        total: count,
+        totalPages: Math.ceil(count / limit),
+      },
+    }
+  }
+
+  /**
+   * Find user's modpacks (owned + member) with pagination and filters
+   */
+  async findByUserPaginated(
+    userId: string,
+    params: PaginationParams,
+  ): Promise<PaginatedResult<DModpack>> {
+    const {
+      page,
+      limit,
+      search,
+      sortBy = 'createdAt',
+      sortOrder = 'desc',
+    } = params
+    const offset = (page - 1) * limit
+
+    // Get modpack IDs where user is a member
+    const memberModpacks = await database
+      .select({ modpackId: modpacksMembers.modpackId })
+      .from(modpacksMembers)
+      .where(
+        and(
+          eq(modpacksMembers.userId, userId),
+          eq(modpacksMembers.isActive, true),
+        ),
+      )
+
+    const memberModpackIds = memberModpacks.map((m) => m.modpackId)
+
+    // Build where conditions
+    const whereConditions = [eq(modpacks.isActive, true)]
+
+    // User is owner OR member
+    if (memberModpackIds.length > 0) {
+      const ownerOrMemberCondition = or(
+        eq(modpacks.owner, userId),
+        inArray(modpacks.id, memberModpackIds),
+      )
+      if (ownerOrMemberCondition) {
+        whereConditions.push(ownerOrMemberCondition)
+      }
+    } else {
+      whereConditions.push(eq(modpacks.owner, userId))
+    }
+
+    if (search) {
+      whereConditions.push(ilike(modpacks.name, `%${search}%`))
+    }
+
+    // Build order by
+    const orderByColumn = modpacks[sortBy]
+    const orderByFn = sortOrder === 'asc' ? asc : desc
+
+    // Get total count
+    const [{ count }] = await database
+      .select({ count: sql<number>`cast(count(*) as integer)` })
+      .from(modpacks)
+      .where(and(...whereConditions))
+
+    // Get paginated data
+    const data = await database.query.modpacks.findMany({
+      where: and(...whereConditions),
+      orderBy: orderByFn(orderByColumn),
+      limit,
+      offset,
+    })
+
+    return {
+      data,
+      pagination: {
+        page,
+        limit,
+        total: count,
+        totalPages: Math.ceil(count / limit),
+      },
+    }
   }
 }
 
