@@ -39,42 +39,40 @@ export function ModpackForm({
         e.stopPropagation()
         form.handleSubmit()
       }}
-      className="space-y-4"
+      className="flex flex-col gap-8"
     >
-      <TextField
-        form={form}
-        name="name"
-        label="Modpack Name *"
-        placeholder="My Awesome Modpack"
-        inputMode="text"
-      />
-
-      <TextField
-        form={form}
-        name="description"
-        label="Description"
-        placeholder="A collection of mods for..."
-        inputMode="text"
-      />
-
-      <TextField
-        form={form}
-        name="avatarUrl"
-        label="Avatar URL"
-        placeholder="https://example.com/avatar.png"
-        disabled={isLoading}
-        inputMode="url"
-      />
-
-      <TextField
-        form={form}
-        name="steamUrl"
-        label="Steam Workshop URL"
-        placeholder="https://steamcommunity.com/..."
-        disabled={isLoading}
-        inputMode="url"
-      />
-
+      <div className="flex flex-col gap-4">
+        <TextField
+          form={form}
+          name="name"
+          label="Modpack Name *"
+          placeholder="My Awesome Modpack"
+          inputMode="text"
+        />
+        <TextField
+          form={form}
+          name="description"
+          label="Description"
+          placeholder="A collection of mods for..."
+          inputMode="text"
+        />
+        <TextField
+          form={form}
+          name="avatarUrl"
+          label="Avatar URL"
+          placeholder="https://example.com/avatar.png"
+          disabled={isLoading}
+          inputMode="url"
+        />
+        <TextField
+          form={form}
+          name="steamUrl"
+          label="Steam Workshop URL"
+          placeholder="https://steamcommunity.com/..."
+          disabled={isLoading}
+          inputMode="url"
+        />
+      </div>
       <SubmitButton
         isLoading={isLoading}
         label={submitText}

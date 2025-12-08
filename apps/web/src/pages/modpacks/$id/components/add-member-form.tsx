@@ -1,8 +1,8 @@
+import { useAppForm } from '@org/design-system/components/ui/form-tanstack'
 import {
   type AddMemberFormData,
   addMemberFormSchema,
 } from '@org/validation/forms/modapack'
-import { useForm } from '@tanstack/react-form'
 import { SubmitButton, TextField } from '@/components/form'
 
 interface AddMemberFormProps {
@@ -14,7 +14,7 @@ export function AddMemberForm({
   onSubmit,
   isLoading = false,
 }: AddMemberFormProps) {
-  const form = useForm({
+  const form = useAppForm({
     defaultValues: {
       email: '',
     },

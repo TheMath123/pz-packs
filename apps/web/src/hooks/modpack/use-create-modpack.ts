@@ -8,7 +8,6 @@ export function useCreateModpack() {
   return useMutation({
     mutationFn: ModpackService.create,
     onSuccess: () => {
-      // Invalidate my modpacks list
       queryClient.invalidateQueries({ queryKey: modpackKeys.myLists() })
     },
   })

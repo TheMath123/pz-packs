@@ -1,10 +1,10 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useCallback } from 'react'
-import { CreateModpackDialog } from '@/components/modpack/create-modpack-dialog'
 import { ModpackFilters } from '@/components/modpack/filters/modpack-filters'
 import { ModpackGrid } from '@/components/modpack/modpack-grid'
 import { PaginationControls } from '@/components/pagination'
 import { useMyModpacks } from '@/hooks/modpack'
+import { CreateModpackDialog } from '@/pages/modpacks/components/create-modpack-dialog'
 
 interface MyModpacksSearchParams {
   page?: number
@@ -33,7 +33,8 @@ export function MyModpacksPage() {
   const updateURL = useCallback(
     (updates: Partial<MyModpacksSearchParams>) => {
       navigate({
-        search: (prev) => ({ ...prev, ...updates }),
+        search: (prev: MyModpacksSearchParams) =>
+          ({ ...prev, ...updates }) as MyModpacksSearchParams,
       })
     },
     [navigate],
@@ -67,7 +68,7 @@ export function MyModpacksPage() {
   if (error) {
     return (
       <div className="text-center py-12">
-        <p className="text-destructive">
+        <p className="text-destructive font-medium">
           Error loading modpacks: {error.message}
         </p>
       </div>
@@ -76,7 +77,7 @@ export function MyModpacksPage() {
 
   return (
     <div className="container mx-auto py-8">
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
         <div>
           <h1 className="text-4xl font-bold mb-2">My Modpacks</h1>
           <p className="text-muted-foreground">

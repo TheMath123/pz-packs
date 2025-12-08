@@ -13,7 +13,7 @@ export function useModpackDetails(
     queryFn: async () => {
       const response = await ModpackService.getById(id)
       if (!response.success) {
-        throw new Error(response.error || 'Failed to fetch modpack')
+        throw new Error(response.error.message || 'Failed to fetch modpack')
       }
       return response.data
     },

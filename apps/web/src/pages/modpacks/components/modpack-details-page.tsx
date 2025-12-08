@@ -27,14 +27,14 @@ import type {
 } from '@org/validation/forms/modapack'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { useState } from 'react'
-import { AddMemberForm } from '@/components/modpack/forms/add-member-form'
-import { ModpackForm } from '@/components/modpack/forms/modpack-form'
 import {
   useAddModpackMember,
   useModpackDetails,
   useRemoveModpackMember,
   useUpdateModpack,
 } from '@/hooks/modpack'
+import { AddMemberForm } from '@/pages/modpacks/$id/components/add-member-form'
+import { ModpackForm } from '@/pages/modpacks/components/modpack-form'
 
 export function ModpackDetailsPage() {
   const { id } = useParams({ strict: false }) as { id: string }
@@ -125,7 +125,7 @@ export function ModpackDetailsPage() {
               })
             }
           >
-            Back to My Modpacks
+            Back
           </Button>
         </div>
       </div>
@@ -137,19 +137,21 @@ export function ModpackDetailsPage() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-4xl font-bold mb-2">{modpack.name}</h1>
+            <h1 className="text-2xl font-bold mb-2">{modpack.name}</h1>
             {modpack.description && (
               <p className="text-muted-foreground">{modpack.description}</p>
             )}
           </div>
           <div className="flex gap-2">
             <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-              <DialogTrigger>
-                <Button variant="outline">
-                  <PencilIcon className="mr-2 h-4 w-4" weight="bold" />
-                  Edit
-                </Button>
-              </DialogTrigger>
+              <DialogTrigger
+                render={
+                  <Button>
+                    <PencilIcon className="mr-2 h-4 w-4" weight="bold" />
+                    Edit
+                  </Button>
+                }
+              />
               <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
                   <DialogTitle>Edit Modpack</DialogTitle>

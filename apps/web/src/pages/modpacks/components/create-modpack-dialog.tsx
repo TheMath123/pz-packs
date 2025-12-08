@@ -12,7 +12,7 @@ import { toast } from '@org/design-system/components/ui/sonner'
 import type { CreateModpackFormData } from '@org/validation/forms/modapack'
 import { useState } from 'react'
 import { useCreateModpack } from '@/hooks/modpack'
-import { ModpackForm } from './forms/modpack-form'
+import { ModpackForm } from './modpack-form'
 
 export function CreateModpackDialog() {
   const [open, setOpen] = useState(false)
