@@ -15,12 +15,16 @@ import {
 import {
   CaretUpDownIcon,
   DiscordLogoIcon,
+  MoonIcon,
   SignOutIcon,
+  SunIcon,
 } from '@org/design-system/components/ui/icons'
+import { useTheme } from '@org/design-system/providers'
 import { auth } from '@/lib/auth'
 import { getInitials } from '@/utils/string'
 
 export function NavUser() {
+  const { theme, toggleTheme } = useTheme()
   const { isPending, data } = auth.useSession()
   if (isPending) return null
 
@@ -63,8 +67,22 @@ export function NavUser() {
       <DropdownMenuPositioner align="start">
         <DropdownMenuContent className="w-56">
           <DropdownMenuItem>My Profile</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
+          <DropdownMenuItem disabled>Support</DropdownMenuItem>
           <DropdownMenuItem disabled>Github</DropdownMenuItem>
+          <DropdownMenuItem onClick={toggleTheme}>
+            {theme === 'light' ? (
+              <MoonIcon
+                className="size-4.5 text-popover-foreground"
+                weight="bold"
+              />
+            ) : (
+              <SunIcon
+                className="size-4.5 text-popover-foreground"
+                weight="bold"
+              />
+            )}
+            {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => auth.signOut()}>
             <SignOutIcon />

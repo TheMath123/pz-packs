@@ -19,7 +19,7 @@ function RouteComponent() {
   return (
     <div className="container mx-auto py-8">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">Public Modpacks</h1>
+        <h1 className="text-4xl font-bold mb-2">My Modpacks</h1>
         <p className="text-muted-foreground">
           Discover and explore community modpacks
         </p>
