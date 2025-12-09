@@ -2,7 +2,7 @@ import type { UseQueryOptions, UseQueryResult } from '@tanstack/react-query'
 import { useQuery } from '@tanstack/react-query'
 import { ModpackService } from '@/services/modpack'
 import type { ModpackMemberWithUser } from '@/services/modpack/get-members.service'
-import { modpackKeys } from './modpack-keys'
+import { modpackKeys } from '../modpack/modpack-keys'
 
 export function useModpackMembers(
   modpackId: string,

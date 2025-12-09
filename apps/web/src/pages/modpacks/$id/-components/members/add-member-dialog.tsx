@@ -9,7 +9,7 @@ import {
 import { toast } from '@org/design-system/components/ui/sonner'
 import type { AddMemberFormData } from '@org/validation/forms/modpack'
 import { useState } from 'react'
-import { useAddModpackMember } from '@/hooks/modpack'
+import { useAddModpackMember } from '@/hooks/members'
 import { AddMemberForm } from './add-member-form'
 
 interface AddMemberDialogProps {

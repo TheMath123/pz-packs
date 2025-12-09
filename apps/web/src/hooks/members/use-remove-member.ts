@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ModpackService } from '@/services/modpack'
-import { modpackKeys } from './modpack-keys'
+import { modpackKeys } from '../modpack/modpack-keys'
 
 interface RemoveMemberParams {
   modpackId: string

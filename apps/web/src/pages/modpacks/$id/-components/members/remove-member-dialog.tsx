@@ -11,7 +11,7 @@ import {
 } from '@org/design-system/components/ui/alert-dialog'
 import { toast } from '@org/design-system/components/ui/sonner'
 import { useState } from 'react'
-import { useRemoveModpackMember } from '@/hooks/modpack'
+import { useRemoveModpackMember } from '@/hooks/members'
 import type { ModpackMemberWithUser } from '@/services/modpack/get-members.service'
 import { MemberAvatarButton } from './member-avatar-button'
 

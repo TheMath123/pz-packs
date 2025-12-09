@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@org/design-system/components/ui/dropdown-menu'
 import { CircleNotchIcon } from '@org/design-system/components/ui/icons'
-import { useModpackMembers } from '@/hooks/modpack'
+import { useModpackMembers } from '@/hooks/members'
 import { getInitials } from '@/utils/string'
 import { AddMemberButton } from './add-member-button'
 import { AddMemberDialog } from './add-member-dialog'
