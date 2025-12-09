@@ -1,6 +1,6 @@
 import { z } from '@org/validation/zod'
 import { createFileRoute } from '@tanstack/react-router'
-import { MyModpacksPage } from './components/my-modpacks-page'
+import { MyModpacksPage } from './my-modpacks-page'
 
 const modpacksSearchSchema = z.object({
   page: z.coerce.number().int().positive().catch(1),

@@ -1,3 +1,4 @@
+import { Badge } from '@org/design-system/components/ui/badge'
 import { Button } from '@org/design-system/components/ui/button'
 import {
   Card,
@@ -15,65 +16,29 @@ import {
   DialogTrigger,
 } from '@org/design-system/components/ui/dialog'
 import {
-  PencilIcon,
   TrashIcon,
   UserCirclePlusIcon,
 } from '@org/design-system/components/ui/icons'
-import { Label } from '@org/design-system/components/ui/label'
-import { Switch } from '@org/design-system/components/ui/switch'
-import type {
-  AddMemberFormData,
-  UpdateModpackFormData,
-} from '@org/validation/forms/modapack'
+import type { AddMemberFormData } from '@org/validation/forms/modapack'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { useState } from 'react'
 import {
   useAddModpackMember,
   useModpackDetails,
   useRemoveModpackMember,
-  useUpdateModpack,
 } from '@/hooks/modpack'
 import { AddMemberForm } from '@/pages/modpacks/$id/components/add-member-form'
-import { ModpackForm } from '@/pages/modpacks/components/modpack-form'
+import { UpdateModpackForm } from './components/update-modpack-form'
 
 export function ModpackDetailsPage() {
   const { id } = useParams({ strict: false }) as { id: string }
   const navigate = useNavigate()
   const { data: modpack, isLoading, error } = useModpackDetails(id)
 
-  const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [addMemberDialogOpen, setAddMemberDialogOpen] = useState(false)
 
-  const updateModpack = useUpdateModpack()
   const addMember = useAddModpackMember()
   const removeMember = useRemoveModpackMember()
-
-  const handleUpdateSubmit = async (data: UpdateModpackFormData) => {
-    const result = await updateModpack.mutateAsync({
-      id,
-      data: {
-        name: data.name,
-        description: data.description,
-        avatarUrl: data.avatarUrl,
-        steamUrl: data.steamUrl,
-      },
-    })
-
-    if (result.success) {
-      setEditDialogOpen(false)
-    }
-  }
-
-  const handleTogglePublic = async () => {
-    if (!modpack) return
-
-    await updateModpack.mutateAsync({
-      id,
-      data: {
-        isPublic: !modpack.isPublic,
-      },
-    })
-  }
 
   const handleAddMember = async (data: AddMemberFormData) => {
     const result = await addMember.mutateAsync({
@@ -108,7 +73,7 @@ export function ModpackDetailsPage() {
   if (error || !modpack) {
     return (
       <div className="container mx-auto py-8">
-        <div className="text-center">
+        <div className="text-center mx-auto">
           <p className="text-destructive mb-4">
             {error?.message || 'Modpack not found'}
           </p>
@@ -136,55 +101,30 @@ export function ModpackDetailsPage() {
     <div className="container mx-auto py-8">
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-2xl font-bold mb-2">{modpack.name}</h1>
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-row gap-2 items-center">
+              <h1 className="text-2xl font-bold">{modpack.name}</h1>
+              {modpack.isPublic ? (
+                <Badge variant="solid" size="sm">
+                  Public
+                </Badge>
+              ) : (
+                <Badge variant="solid" size="sm">
+                  Private
+                </Badge>
+              )}
+            </div>
             {modpack.description && (
               <p className="text-muted-foreground">{modpack.description}</p>
             )}
           </div>
           <div className="flex gap-2">
-            <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-              <DialogTrigger
-                render={
-                  <Button>
-                    <PencilIcon className="mr-2 h-4 w-4" weight="bold" />
-                    Edit
-                  </Button>
-                }
-              />
-              <DialogContent className="sm:max-w-[500px]">
-                <DialogHeader>
-                  <DialogTitle>Edit Modpack</DialogTitle>
-                  <DialogDescription>
-                    Update your modpack information
-                  </DialogDescription>
-                </DialogHeader>
-                <ModpackForm
-                  defaultValues={{
-                    name: modpack.name,
-                    description: modpack.description || '',
-                    avatarUrl: modpack.avatarUrl || '',
-                    steamUrl: modpack.steamUrl || '',
-                  }}
-                  onSubmit={handleUpdateSubmit}
-                  isLoading={updateModpack.isPending}
-                  submitText="Save Changes"
-                />
-              </DialogContent>
-            </Dialog>
+            <UpdateModpackForm modpackId={id} modpack={modpack} />
           </div>
         </div>
 
         <div className="flex items-center gap-4 mb-6">
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="public"
-              checked={modpack.isPublic}
-              onCheckedChange={handleTogglePublic}
-              disabled={updateModpack.isPending}
-            />
-            <Label htmlFor="public">Public Modpack</Label>
-          </div>
+          <div className="flex items-center space-x-2"></div>
           {modpack.steamUrl && (
             <a
               href={modpack.steamUrl}
@@ -218,7 +158,6 @@ export function ModpackDetailsPage() {
             )}
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
