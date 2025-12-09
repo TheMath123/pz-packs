@@ -1,5 +1,5 @@
+export * from '../../pages/modpacks/$id/-components/members/modpack-members-avatars'
+export * from '../../pages/modpacks/$id/-components/members/remove-member-dialog'
 export * from './filters/modpack-filters'
 export * from './modpack-card'
 export * from './modpack-grid'
-export * from './modpack-members-avatars'
-export * from './remove-member-dialog'

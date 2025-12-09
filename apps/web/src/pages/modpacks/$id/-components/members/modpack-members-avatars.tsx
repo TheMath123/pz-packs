@@ -10,13 +10,11 @@ import {
   DropdownMenuPositioner,
   DropdownMenuTrigger,
 } from '@org/design-system/components/ui/dropdown-menu'
-import {
-  CircleNotchIcon,
-  UserPlusIcon,
-} from '@org/design-system/components/ui/icons'
-import { useModpackMembers } from '@/hooks/modpack'
-import type { ModpackMemberWithUser } from '@/services/modpack/get-members.service'
+import { CircleNotchIcon } from '@org/design-system/components/ui/icons'
+import { useAddModpackMember, useModpackMembers } from '@/hooks/modpack'
+
 import { getInitials } from '@/utils/string'
+import { AddMemberButton } from './add-member-button'
 import { RemoveMemberDialog } from './remove-member-dialog'
 
 interface ModpackMembersAvatarsProps {
@@ -29,6 +27,23 @@ export function ModpackMembersAvatars({
   onAddMember,
 }: ModpackMembersAvatarsProps) {
   const { data: members, isLoading } = useModpackMembers(modpackId)
+  const addModpackMember = useAddModpackMember()
+
+  const handleAddMemberSubmit = async (data: AddMemberModpackFormData) => {
+    const result = await addModpackMember.mutateAsync({
+      id: modpackId,
+      data: {
+        name: data.name,
+        description: data.description,
+        avatarUrl: data.avatarUrl,
+        steamUrl: data.steamUrl,
+      },
+    })
+
+    if (result.success) {
+      setEditDialogOpen(false)
+    }
+  }
 
   if (isLoading) {
     return (
@@ -45,16 +60,7 @@ export function ModpackMembersAvatars({
     return (
       <div className="flex items-center gap-2">
         <span className="text-sm text-muted-foreground">No members yet</span>
-        {onAddMember && (
-          <button
-            type="button"
-            onClick={onAddMember}
-            className="flex items-center gap-1 text-sm text-primary hover:underline"
-          >
-            <UserPlusIcon className="h-4 w-4" weight="bold" />
-            Add member
-          </button>
-        )}
+        {onAddMember && <AddMemberButton onAddMember={onAddMember} />}
       </div>
     )
   }
@@ -65,9 +71,12 @@ export function ModpackMembersAvatars({
   return (
     <div className="flex items-center -space-x-2">
       {visibleMembers.map((member) => (
-        <MemberAvatar key={member.id} member={member} />
+        <RemoveMemberDialog
+          key={member.id}
+          member={member}
+          modpackId={modpackId}
+        />
       ))}
-
       {remainingCount > 0 && (
         <DropdownMenu>
           <DropdownMenuTrigger
@@ -113,40 +122,8 @@ export function ModpackMembersAvatars({
           </DropdownMenuPositioner>
         </DropdownMenu>
       )}
-
-      {onAddMember && (
-        <button
-          type="button"
-          onClick={onAddMember}
-          className="relative inline-flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed border-muted-foreground/25 hover:border-muted-foreground/50 hover:bg-muted/50 transition-colors ml-2"
-          title="Add member"
-        >
-          <UserPlusIcon
-            className="h-4 w-4 text-muted-foreground"
-            weight="bold"
-          />
-        </button>
-      )}
-    </div>
-  )
-}
-
-interface MemberAvatarProps {
-  member: ModpackMemberWithUser
-}
-
-function MemberAvatar({ member }: MemberAvatarProps) {
-  return (
-    <div className="group relative">
-      <Avatar className="h-10 w-10 border-2 border-background hover:z-10 transition-all">
-        <AvatarImage src={member.user.image || undefined} />
-        <AvatarFallback>
-          {getInitials(member.user.name || member.user.email)}
-        </AvatarFallback>
-      </Avatar>
-      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
-        {member.user.name || member.user.email}
-      </div>
+      ''
+      {onAddMember && <AddMemberButton onAddMember={onAddMember} />}
     </div>
   )
 }

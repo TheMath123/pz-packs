@@ -1,16 +1,9 @@
 import { Badge } from '@org/design-system/components/ui/badge'
 import { Button } from '@org/design-system/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@org/design-system/components/ui/card'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { useModpackDetails } from '@/hooks/modpack'
-import { UpdateModpackForm } from './_update-modpack-form'
-import { ModpackMembers } from './modpack-members'
+import { ModpackMembers } from './members/modpack-members'
+import { UpdateModpackForm } from './update-modpack-form'
 
 export function ModpackDetailsPage() {
   const { id } = useParams({ strict: false }) as { id: string }
@@ -98,27 +91,6 @@ export function ModpackDetailsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Mods</CardTitle>
-            <CardDescription>Mods included in this modpack</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {/* adicionar o retorno dos mods */}
-            {modpack.mods && modpack.mods.length > 0 ? (
-              <ul className="space-y-2">
-                {modpack.mods.map((mod, index) => (
-                  <li key={index} className="text-sm">
-                    {mod}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-sm text-muted-foreground">No mods added yet</p>
-            )}
-          </CardContent>
-        </Card>
-
         <ModpackMembers modpackId={id} />
       </div>
     </div>

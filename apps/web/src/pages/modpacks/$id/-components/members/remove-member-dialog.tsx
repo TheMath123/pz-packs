@@ -9,11 +9,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@org/design-system/components/ui/alert-dialog'
-import { Button } from '@org/design-system/components/ui/button'
-import { TrashIcon } from '@org/design-system/components/ui/icons'
 import { useState } from 'react'
 import { useRemoveModpackMember } from '@/hooks/modpack'
 import type { ModpackMemberWithUser } from '@/services/modpack/get-members.service'
+import { MemberAvatarButton } from './member-avatar-button'
 
 interface RemoveMemberDialogProps {
   modpackId: string
@@ -44,16 +43,7 @@ export function RemoveMemberDialog({
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger
-        render={
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => setOpen(true)}
-            disabled={removeMember.isPending}
-          >
-            <TrashIcon className="h-4 w-4 text-destructive" weight="bold" />
-          </Button>
-        }
+        render={() => <MemberAvatarButton member={member} />}
       />
       <AlertDialogContent>
         <AlertDialogHeader>
