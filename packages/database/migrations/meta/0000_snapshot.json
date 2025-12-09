@@ -1,5 +1,5 @@
 {
-  "id": "6e12c517-08d8-4145-add2-cd9cb39d190f",
+  "id": "6a196f42-d2bd-430f-9069-7cab641a4cd7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -132,12 +132,6 @@
         "description": {
           "name": "description",
           "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "mods": {
-          "name": "mods",
-          "type": "uuid[]",
           "primaryKey": false,
           "notNull": false
         },
@@ -282,6 +276,86 @@
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.modpacks_mods": {
+      "name": "modpacks_mods",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "modpack_id": {
+          "name": "modpack_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mod_id": {
+          "name": "mod_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "modpacks_mods_modpack_id_modpacks_id_fk": {
+          "name": "modpacks_mods_modpack_id_modpacks_id_fk",
+          "tableFrom": "modpacks_mods",
+          "tableTo": "modpacks",
+          "columnsFrom": [
+            "modpack_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "modpacks_mods_mod_id_mods_id_fk": {
+          "name": "modpacks_mods_mod_id_mods_id_fk",
+          "tableFrom": "modpacks_mods",
+          "tableTo": "mods",
+          "columnsFrom": [
+            "mod_id"
           ],
           "columnsTo": [
             "id"
