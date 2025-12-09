@@ -57,24 +57,23 @@ export function MembersList({
   const remainingCount = members.length - 5
 
   return (
-    <div className="flex flex-row gap-2 items-center">
-      <div className="flex items-center -space-x-2">
-        {visibleMembers.map((member) => (
-          <RemoveMemberDialog
-            key={member.id}
-            member={member}
-            modpackId={modpackId}
-            canRemove={canManageMembers}
-          />
-        ))}
-      </div>
+    <div className="flex flex-row -space-x-2 items-center">
+      {visibleMembers.map((member) => (
+        <RemoveMemberDialog
+          key={member.id}
+          member={member}
+          modpackId={modpackId}
+          canRemove={canManageMembers}
+        />
+      ))}
+
       {remainingCount > 0 && (
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
               <button
                 type="button"
-                className="relative inline-flex h-10 w-10 items-center justify-center rounded-full border-2 border-background bg-muted hover:bg-muted/80 transition-colors"
+                className="relative inline-flex h-10 w-10 items-center justify-center rounded-md border-2 border-border shadow bg-muted hover:bg-muted-foreground transition-colors cursor-pointer"
               >
                 <span className="text-xs font-medium">+{remainingCount}</span>
               </button>
@@ -90,12 +89,12 @@ export function MembersList({
                   key={member.id}
                   className="flex items-center gap-3 p-2"
                 >
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={member.user.image || undefined} />
-                    <AvatarFallback>
-                      {getInitials(member.user.name || member.user.email)}
-                    </AvatarFallback>
-                  </Avatar>
+                  <RemoveMemberDialog
+                    disabledTooltip={true}
+                    modpackId={modpackId}
+                    member={member}
+                    canRemove={canManageMembers}
+                  />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">
                       {member.user.name || member.user.email}
@@ -106,11 +105,6 @@ export function MembersList({
                       </p>
                     )}
                   </div>
-                  <RemoveMemberDialog
-                    modpackId={modpackId}
-                    member={member}
-                    canRemove={canManageMembers}
-                  />
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>

@@ -11,11 +11,13 @@ import { getInitials } from '@/utils/string'
 interface MemberAvatarButtonProps extends React.ComponentProps<'button'> {
   member: ModpackMemberWithUser
   readOnly?: boolean
+  disabledTooltip?: boolean
 }
 export function MemberAvatarButton({
   member,
   readOnly = false,
   className,
+  disabledTooltip = false,
   ...props
 }: MemberAvatarButtonProps) {
   return (
@@ -40,9 +42,14 @@ export function MemberAvatarButton({
           {getInitials(member.user.name || member.user.email)}
         </AvatarFallback>
       </Avatar>
-      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-background text-popover-foreground text-xs rounded shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border-2 border-border z-50">
-        {member.user.name || member.user.email}
-      </div>
+      {!disabledTooltip && (
+        <div className="absolute flex flex-col items-start gap-1 bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-background text-popover-foreground text-xs rounded shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border-2 border-border z-50">
+          <span className="text-base font-medium">{member.user.name}</span>
+          <span className="text-xs text-muted-foreground truncate">
+            {member.user.email}
+          </span>
+        </div>
+      )}
     </button>
   )
 }

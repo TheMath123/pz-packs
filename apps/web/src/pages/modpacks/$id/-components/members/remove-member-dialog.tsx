@@ -19,6 +19,7 @@ interface RemoveMemberDialogProps {
   modpackId: string
   member: ModpackMemberWithUser
   canRemove?: boolean
+  disabledTooltip?: boolean
   onSuccess?: () => void
 }
 
@@ -26,6 +27,7 @@ export function RemoveMemberDialog({
   modpackId,
   member,
   canRemove = false,
+  disabledTooltip,
   onSuccess,
 }: RemoveMemberDialogProps) {
   const [open, setOpen] = useState(false)
@@ -58,7 +60,13 @@ export function RemoveMemberDialog({
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger
-        render={(props) => <MemberAvatarButton member={member} {...props} />}
+        render={(props) => (
+          <MemberAvatarButton
+            disabledTooltip={disabledTooltip}
+            member={member}
+            {...props}
+          />
+        )}
       />
       <AlertDialogContent>
         <AlertDialogHeader>
