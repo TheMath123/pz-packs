@@ -1,10 +1,13 @@
 import { useTheme } from '@org/design-system/providers'
 import { Link } from '@tanstack/react-router'
+import { auth } from '@/lib/auth'
 import { Anchor } from '../anchor'
 import { NavUser } from './nav-user'
 
 export function AppHeader() {
   const { theme } = useTheme()
+  const { data: session } = auth.useSession()
+
   return (
     <header className="container flex justify-between items-center my-4">
       <Link
@@ -22,11 +25,15 @@ export function AppHeader() {
         />
         <h1 className="font-bold text-2xl">PZ Packs</h1>
       </Link>
-      <nav className="flex flex-row gap-3 items-center">
-        <Anchor href="/">Home</Anchor>
-        <Anchor href="/modpacks">My Modpacks</Anchor>
+      <div className="flex flex-row gap-3 items-center">
+        {session ? (
+          <nav className="flex flex-row gap-3 items-center">
+            <Anchor href="/">Home</Anchor>
+            <Anchor href="/modpacks">My Modpacks</Anchor>
+          </nav>
+        ) : null}
         <NavUser />
-      </nav>
+      </div>
     </header>
   )
 }

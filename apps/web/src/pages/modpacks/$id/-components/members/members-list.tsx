@@ -58,14 +58,16 @@ export function MembersList({
 
   return (
     <div className="flex flex-row gap-2 items-center">
-      {visibleMembers.map((member) => (
-        <RemoveMemberDialog
-          key={member.id}
-          member={member}
-          modpackId={modpackId}
-          canRemove={canManageMembers}
-        />
-      ))}
+      <div className="flex items-center -space-x-2">
+        {visibleMembers.map((member) => (
+          <RemoveMemberDialog
+            key={member.id}
+            member={member}
+            modpackId={modpackId}
+            canRemove={canManageMembers}
+          />
+        ))}
+      </div>
       {remainingCount > 0 && (
         <DropdownMenu>
           <DropdownMenuTrigger

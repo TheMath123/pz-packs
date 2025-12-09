@@ -29,23 +29,6 @@ export class ModpackMemberRepository {
   }
 
   /**
-   * Remove a member from the modpack by email (soft delete - marks as inactive)
-   */
-  async removeMemberByEmail(modpackId: string, email: string): Promise<void> {
-    await database
-      .update(modpacksMembers)
-      .set({
-        isActive: false,
-        updatedAt: new Date(),
-      })
-      .from(modpacksMembers)
-      .innerJoin(users, eq(modpacksMembers.userId, users.id))
-      .where(
-        and(eq(modpacksMembers.modpackId, modpackId), eq(users.email, email)),
-      )
-  }
-
-  /**
    * Remove a member from the modpack (soft delete - marks as inactive)
    */
   async removeMember(modpackId: string, userId: string): Promise<void> {
@@ -53,7 +36,6 @@ export class ModpackMemberRepository {
       .update(modpacksMembers)
       .set({
         isActive: false,
-        updatedAt: new Date(),
       })
       .where(
         and(

@@ -16,6 +16,9 @@ export function useAddModpackMember() {
     onSuccess: (_, variables) => {
       // Invalidate specific modpack detail to refresh members list
       queryClient.invalidateQueries({
+        queryKey: modpackKeys.members(variables.modpackId),
+      })
+      queryClient.invalidateQueries({
         queryKey: modpackKeys.detail(variables.modpackId),
       })
     },

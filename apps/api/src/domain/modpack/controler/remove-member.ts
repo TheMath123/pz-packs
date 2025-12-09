@@ -55,7 +55,7 @@ export async function removeMemberController({
     )
   }
 
-  await modpackMemberRepository.removeMemberByEmail(params.id, body.email)
+  await modpackMemberRepository.removeMember(params.id, member.id)
 
   return new ApiResponse(
     {
