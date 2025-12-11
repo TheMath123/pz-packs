@@ -4,10 +4,10 @@ import { SteamLogoIcon } from '@org/design-system/components/ui/icons'
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { useCanManageModpack } from '@/hooks'
 import { useModpackDetails } from '@/hooks/modpack'
-import { ModpackMembers } from './members/modpack-members'
+import { Members } from './members/members.tsx'
 import { UpdateModpackDialog } from './update-modpack-dialog.tsx'
 
-export function ModpackDetailsPage() {
+export function MyModpacksPages() {
   const { id } = useParams({ strict: false }) as { id: string }
   const navigate = useNavigate()
   const { data: modpack, isLoading, error } = useModpackDetails(id)
@@ -95,10 +95,10 @@ export function ModpackDetailsPage() {
                 {modpack.description}
               </p>
             )}
+            <Members modpackId={modpack.id} canManageMembers={canManage} />
           </div>
           <div className="flex flex-col gap-4 items-end">
-            <UpdateModpackDialog modpackId={id} modpack={modpack} />
-            <ModpackMembers modpackId={id} canManageMembers={canManage} />
+            <UpdateModpackDialog modpack={modpack} />
           </div>
         </div>
 

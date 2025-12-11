@@ -1,3 +1,4 @@
+import { toast } from '@org/design-system/components/ui/sonner'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ModpackService } from '@/services/modpack'
 import { modpackKeys } from './modpack-keys'
@@ -20,12 +21,17 @@ export function useUpdateModpack() {
     mutationFn: ({ id, data }: UpdateModpackParams) =>
       ModpackService.update(id, data),
     onSuccess: (_, variables) => {
-      // Invalidate specific modpack detail
+      toast.success('Modpack updated successfully')
       queryClient.invalidateQueries({
         queryKey: modpackKeys.detail(variables.id),
       })
-      // Invalidate my modpacks list
       queryClient.invalidateQueries({ queryKey: modpackKeys.myLists() })
+    },
+    onError: (error) => {
+      toast.error(
+        (error as Error).message ||
+          'Failed to update modpack. Please try again later.',
+      )
     },
   })
 }

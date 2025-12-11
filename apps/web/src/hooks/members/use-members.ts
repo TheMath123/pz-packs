@@ -4,7 +4,7 @@ import { ModpackService } from '@/services/modpack'
 import type { ModpackMemberWithUser } from '@/services/modpack/get-members.service'
 import { modpackKeys } from '../modpack/modpack-keys'
 
-export function useModpackMembers(
+export function useMembers(
   modpackId: string,
   options?: Omit<
     UseQueryOptions<ModpackMemberWithUser[]>,

@@ -7,7 +7,7 @@ import {
   PopoverPositioner,
   PopoverTrigger,
 } from '@org/design-system/components/ui/popover'
-import { useModpackMembers } from '@/hooks/members'
+import { useMembers } from '@/hooks/members'
 import { AddMemberButton } from './add-member-button'
 import { AddMemberDialog } from './add-member-dialog'
 import { MemberAvatarButton } from './member-avatar-button'
@@ -23,7 +23,7 @@ export function MembersList({
   modpackId,
   canManageMembers = false,
 }: MembersListProps) {
-  const { data: members, isLoading } = useModpackMembers(modpackId)
+  const { data: members, isLoading } = useMembers(modpackId)
 
   if (isLoading) {
     return (
@@ -38,8 +38,7 @@ export function MembersList({
 
   if (!members || members.length === 0) {
     return (
-      <div className="flex items-center gap-2">
-        <span className="text-sm text-muted-foreground">No members yet</span>
+      <div className="flex items-center gap-2 -translate-x-3">
         {canManageMembers && (
           <AddMemberDialog
             modpackId={modpackId}

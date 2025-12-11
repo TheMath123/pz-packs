@@ -6,33 +6,39 @@ import {
 import { SubmitButton } from '@/components/form/submit-button'
 import { SwitchField } from '@/components/form/switch-field'
 import { TextField } from '@/components/form/text-field'
+import { useUpdateModpack } from '@/hooks'
+import type { ModpackWithMembers } from '@/services/modpack/get-modpack-details.service'
 
 interface UpdateModpackFormProps {
-  defaultValues?: Partial<UpdateModpackFormData>
-  onSubmit: (data: UpdateModpackFormData) => void | Promise<void>
-  isLoading?: boolean
-  submitText?: string
+  modpack: ModpackWithMembers
+  onSuccess: () => void
 }
 
 export function UpdateModpackForm({
-  defaultValues,
-  onSubmit,
-  isLoading = false,
-  submitText = 'Save',
+  modpack,
+  onSuccess,
 }: UpdateModpackFormProps) {
+  const updateModpack = useUpdateModpack()
+
   const form = useAppForm({
     defaultValues: {
-      name: defaultValues?.name || '',
-      description: defaultValues?.description || undefined,
-      avatarUrl: defaultValues?.avatarUrl || undefined,
-      steamUrl: defaultValues?.steamUrl || undefined,
-      isPublic: defaultValues?.isPublic || false,
-    },
+      name: modpack?.name || '',
+      description: modpack?.description || undefined,
+      avatarUrl: modpack?.avatarUrl || undefined,
+      steamUrl: modpack?.steamUrl || undefined,
+      isPublic: modpack?.isPublic || false,
+    } as UpdateModpackFormData,
     validators: {
       onSubmit: updateModpackFormSchema,
     },
-    onSubmit: ({ value }) => onSubmit(value),
+    onSubmit: async ({ value }) =>
+      await updateModpack.mutateAsync({
+        id: modpack.id,
+        data: value,
+      }),
   })
+
+  updateModpack.isSuccess && onSuccess()
 
   return (
     <form
@@ -63,7 +69,7 @@ export function UpdateModpackForm({
           name="avatarUrl"
           label="Avatar URL"
           placeholder="https://example.com/avatar.png"
-          disabled={isLoading}
+          disabled={updateModpack.isPending}
           inputMode="url"
         />
         <TextField
@@ -71,7 +77,7 @@ export function UpdateModpackForm({
           name="steamUrl"
           label="Steam Workshop URL"
           placeholder="https://steamcommunity.com/..."
-          disabled={isLoading}
+          disabled={updateModpack.isPending}
           inputMode="url"
         />
         <SwitchField
@@ -79,12 +85,12 @@ export function UpdateModpackForm({
           name="isPublic"
           label="Public"
           description="If enabled, your modpack will be visible to everyone."
-          disabled={isLoading}
+          disabled={updateModpack.isPending}
         />
       </div>
       <SubmitButton
-        isLoading={isLoading}
-        label={submitText}
+        isLoading={updateModpack.isPending}
+        label="Save"
         loadingLabel="Saving..."
       />
     </form>

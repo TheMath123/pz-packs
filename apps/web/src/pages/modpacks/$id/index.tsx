@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { ModpackDetailsPage } from './-components/modpack-details-page'
+import { MyModpacksPages } from './-components/my-modpacks-page'
 
 export const Route = createFileRoute('/modpacks/$id/')({
-  component: ModpackDetailsPage,
+  component: MyModpacksPages,
 })
