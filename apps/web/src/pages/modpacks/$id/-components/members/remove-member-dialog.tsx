@@ -19,7 +19,6 @@ interface RemoveMemberDialogProps {
   modpackId: string
   member: ModpackMemberWithUser
   canRemove?: boolean
-  onSuccess?: () => void
   trigger: (props: React.ComponentProps<'button'>) => React.ReactElement
 }
 
@@ -27,29 +26,18 @@ export function RemoveMemberDialog({
   modpackId,
   member,
   canRemove = false,
-  onSuccess,
   trigger,
 }: RemoveMemberDialogProps) {
   const [open, setOpen] = useState(false)
   const removeMember = useRemoveModpackMember()
 
   const handleRemove = async () => {
-    const result = await removeMember.mutateAsync({
+    await removeMember.mutateAsync({
       modpackId,
       email: member.user.email,
     })
 
-    if (!result.success) {
-      toast.error(
-        result.error.message ||
-          'Failed to remove member. Please try again later.',
-      )
-      return
-    }
-
-    toast.success('Member removed successfully')
     setOpen(false)
-    onSuccess?.()
   }
 
   if (!canRemove) {
