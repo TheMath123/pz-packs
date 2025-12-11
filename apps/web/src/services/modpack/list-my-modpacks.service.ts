@@ -1,6 +1,6 @@
 import { env } from '@/env'
 import type { PaginatedResponse, PaginateQueryParams } from '../dtos'
-import { failure, headers, makeRequestQuery, success } from '../helpers'
+import { headers, makeRequestQuery } from '../helpers'
 import type { IModpackDTO } from './dtos'
 
 export async function listMyModpacksService(

@@ -1,6 +1,5 @@
-import type { DModpack } from '@org/database/schemas'
 import { env } from '@/env'
-import { failure, headers, success } from '../helpers'
+import { headers } from '../helpers'
 import type { IModpackDTO } from './dtos'
 
 export async function getModpackService(id: string) {
@@ -12,12 +11,13 @@ export async function getModpackService(id: string) {
     headers: { ...headers },
   })
 
-  console.log(await res.json())
+  const data = await res.json()
 
   if (res.status !== 200) {
-    const { error } = await res.json()
-    throw new Error(error.message ?? 'We have a problem listing the modpacks')
+    throw new Error(
+      data.error?.message ?? 'We have a problem listing the modpacks',
+    )
   }
 
-  return (await res.json()) as IModpackDTO
+  return data as IModpackDTO
 }
