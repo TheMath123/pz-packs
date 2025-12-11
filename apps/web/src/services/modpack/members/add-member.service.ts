@@ -1,6 +1,6 @@
 import type { DModpackMember } from '@org/database/schemas'
 import { env } from '@/env'
-import { failure, headers, success } from '../helpers'
+import { headers } from '../../helpers'
 
 export async function addModpackMemberService(
   modpackId: string,
@@ -15,6 +15,9 @@ export async function addModpackMemberService(
     body: JSON.stringify({ email, permission: ['read'] }),
   })
 
-  if (res.status !== 201) return failure(res)
-  return success<DModpackMember>(res)
+  if (res.status !== 201) {
+    const { error } = await res.json()
+    throw new Error(error.message ?? 'We have a problem adding this member')
+  }
+  return (await res.json()) as DModpackMember
 }
