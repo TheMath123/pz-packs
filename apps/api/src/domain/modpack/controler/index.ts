@@ -9,6 +9,7 @@ import { listModsController } from './list-mods'
 import { listMyModpacksController } from './list-my'
 import { removeMemberController } from './remove-member'
 import { updateModpackController } from './update'
+import { removeModController } from './remove-mod'
 
 export const modpackController = {
   create: createModpackController,
@@ -22,4 +23,5 @@ export const modpackController = {
   listMembers: listMembersController,
   addMod: addModController,
   listMods: listModsController,
+  removeMod: removeModController,
 }

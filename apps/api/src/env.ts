@@ -7,6 +7,7 @@ const schema = z.object({
   ...databaseEnv.shape,
   ...cacheEnv.shape,
   ...authenticationEnv.shape,
+  STEAM_API_KEY: z.string().min(1),
 })
 
 export const env = schema.parse(process.env)
