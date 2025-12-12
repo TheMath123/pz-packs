@@ -58,7 +58,7 @@ export class ModpackModRepository {
   /**
    * Get all mods from a modpack (active only)
    */
-  async findByModpack(modpackId: string): Promise<DModpackMod[]> {
+  async findByModpack(modpackId: string) {
     return database.query.modpacksMods.findMany({
       where: and(
         eq(modpacksMods.modpackId, modpackId),
@@ -93,14 +93,10 @@ export class ModpackModRepository {
       where: and(
         eq(modpacksMods.modpackId, modpackId),
         eq(modpacksMods.modId, modId),
-        // eq(modpacksMods.isActive, true),
+        eq(modpacksMods.isActive, true),
       ),
     })
-    // TODO: ARRUMAR PARA BUSCAR O MODPACK
-
-    console.log(modpackMod)
-
-    return modpackMod
+    return !!modpackMod
   }
 
   /**

@@ -131,7 +131,7 @@ async function processMod(
     // Create mod
     mod = await modRepository.create({
       name: title,
-      modId: modIdStr,
+      steamModId: modIdStr,
       workshopId: workshopId,
       mapFolders: scrapedInfo.map_folder || [],
       requiredMods: scrapedInfo.modsRequirements

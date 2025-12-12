@@ -7,6 +7,7 @@ import {
   listModsQuerySchema,
   modpackIdParamSchema,
   removeMemberSchema,
+  removeModpackIdParamSchema,
   updateModpackSchema,
 } from '@/domain/modpack/validations'
 import type { Server } from '../server'
@@ -230,7 +231,7 @@ export function modpacksRoutes(app: Server) {
       },
       {
         auth: true,
-        params: modpackIdParamSchema,
+        params: removeModpackIdParamSchema,
         detail: {
           tags: ['Mods'],
           description: 'Remove a mod from the modpack (owner/member only)',

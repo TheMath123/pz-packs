@@ -5,7 +5,7 @@ import { modpacksMods, mods } from '../schemas'
 
 export interface CreateModData {
   name: string
-  modId: string
+  steamModId: string
   workshopId: string
   mapFolders?: string[]
   requiredMods?: string[]
@@ -34,6 +34,12 @@ export class ModRepository {
   async findByWorkshopId(workshopId: string): Promise<DMod | undefined> {
     return database.query.mods.findFirst({
       where: eq(mods.workshopId, workshopId),
+    })
+  }
+
+  async findBySteamModId(steamModId: string): Promise<DMod | undefined> {
+    return database.query.mods.findFirst({
+      where: eq(mods.steamModId, steamModId),
     })
   }
 

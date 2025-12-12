@@ -9,7 +9,7 @@ import { ApiResponse } from '@/utils'
 
 interface RemoveModControllerParams {
   params: {
-    id: string // modpackId
+    id: string
     modId: string
   }
   user: User
@@ -20,6 +20,7 @@ export async function removeModController({
   user,
 }: RemoveModControllerParams) {
   const { id: modpackId, modId } = params
+  console.log(modpackId, modId)
 
   // 1. Check permissions
   const modpack = await modpackRepository.findById(modpackId)
@@ -49,9 +50,15 @@ export async function removeModController({
     )
   }
 
-  // 2. Check if mod exists in modpack
-  const exists = await modpackModRepository.exists(modpackId, modId)
-  console.log(exists)
+  // 2. Resolve Mod (UUID or WorkshopID)
+  const mod = await modRepository.findById(modId)
+
+  if (!mod) {
+    return new ApiResponse({ error: { message: 'Mod not found' } }, 404)
+  }
+
+  // 3. Check if mod exists in modpack
+  const exists = await modpackModRepository.exists(modpackId, mod.id)
   if (!exists) {
     return new ApiResponse(
       { error: { message: 'Mod not found in modpack' } },
@@ -59,17 +66,12 @@ export async function removeModController({
     )
   }
 
-  const targetMod = await modRepository.findById(modId)
-  if (!targetMod) {
-    return new ApiResponse({ error: { message: 'Mod details not found' } }, 404)
-  }
-
-  // 3. Analyze dependencies to remove
+  // 4. Analyze dependencies to remove
   const allModpackMods = await modpackModRepository.findByModpack(modpackId)
 
   // Check if the target mod is required by any other mod in the modpack
   const requiredBy = allModpackMods.filter((m) =>
-    m.mod.requiredMods?.includes(targetMod.workshopId),
+    m.mod.requiredMods?.includes(mod.workshopId),
   )
 
   if (requiredBy.length > 0) {
@@ -85,7 +87,7 @@ export async function removeModController({
   }
 
   const modsToRemove = new Set<string>()
-  modsToRemove.add(modId)
+  modsToRemove.add(mod.id)
 
   // Helper to get Mod ID (UUID) from Workshop ID
   const getModId = (workshopId: string) =>
@@ -93,7 +95,9 @@ export async function removeModController({
 
   // Recursive function to find orphans
   const findOrphans = (currentModId: string) => {
-    const currentMod = allModpackMods.find((m) => m.modId === currentModId)?.mod
+    const currentMod = allModpackMods.find(
+      (modInModpack) => modInModpack.modId === currentModId,
+    )?.mod
     if (!currentMod || !currentMod.requiredMods) return
 
     for (const reqWorkshopId of currentMod.requiredMods) {
@@ -103,9 +107,9 @@ export async function removeModController({
       if (!reqModId) continue // Dependency not in modpack (shouldn't happen if consistent)
 
       // Check if any OTHER mod (not currently marked for removal) uses this dependency
-      const isUsed = allModpackMods.some((m) => {
-        if (modsToRemove.has(m.modId)) return false // Ignore mods being removed
-        return m.mod.requiredMods?.includes(reqWorkshopId)
+      const isUsed = allModpackMods.some((modInModpack) => {
+        if (modsToRemove.has(modInModpack.modId)) return false // Ignore mods being removed
+        return modInModpack.mod.requiredMods?.includes(reqWorkshopId)
       })
 
       if (!isUsed) {
@@ -118,7 +122,7 @@ export async function removeModController({
     }
   }
 
-  findOrphans(modId)
+  findOrphans(mod.id)
 
   // 4. Perform removal
   const removedModsNames: string[] = []
