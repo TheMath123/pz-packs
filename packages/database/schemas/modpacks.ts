@@ -1,5 +1,5 @@
 import { type InferSelectModel, relations } from 'drizzle-orm'
-import { boolean, pgTable, text, uuid } from 'drizzle-orm/pg-core'
+import { boolean, pgTable, text, unique, uuid } from 'drizzle-orm/pg-core'
 import { createdAt, id, updatedAt } from '../utils/schemas-types'
 import { mods } from './mods'
 import { users } from './users'
@@ -38,18 +38,24 @@ export const modpacksMembers = pgTable('modpacks_members', {
 
 export type DModpackMember = InferSelectModel<typeof modpacksMembers>
 
-export const modpacksMods = pgTable('modpacks_mods', {
-  id,
-  modpackId: uuid('modpack_id')
-    .notNull()
-    .references(() => modpacks.id),
-  modId: uuid('mod_id')
-    .notNull()
-    .references(() => mods.id),
-  isActive: boolean('is_active').default(true).notNull(),
-  createdAt,
-  updatedAt,
-})
+export const modpacksMods = pgTable(
+  'modpacks_mods',
+  {
+    id,
+    modpackId: uuid('modpack_id')
+      .notNull()
+      .references(() => modpacks.id),
+    modId: uuid('mod_id')
+      .notNull()
+      .references(() => mods.id),
+    isActive: boolean('is_active').default(true).notNull(),
+    createdAt,
+    updatedAt,
+  },
+  (t) => ({
+    unq: unique().on(t.modpackId, t.modId),
+  }),
+)
 
 export type DModpackMod = InferSelectModel<typeof modpacksMods>
 

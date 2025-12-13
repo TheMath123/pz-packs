@@ -1,0 +1,1 @@
+ALTER TABLE "modpacks_mods" ADD CONSTRAINT "modpacks_mods_modpack_id_mod_id_unique" UNIQUE("modpack_id","mod_id");
