@@ -70,7 +70,14 @@ export class ModRepository {
     const limit = params.limit || 10
     const offset = (page - 1) * limit
 
-    const conditions = [eq(mods.isActive, true)]
+    const conditions = [
+      eq(mods.isActive, true),
+      eq(modpacksMods.isActive, true),
+    ]
+
+    if (params.modpackId) {
+      conditions.push(eq(modpacksMods.modpackId, params.modpackId))
+    }
 
     if (params.search) {
       const searchCondition = or(
@@ -80,10 +87,6 @@ export class ModRepository {
       if (searchCondition) {
         conditions.push(searchCondition)
       }
-    }
-
-    if (!params.modpackId) {
-      throw new Error('Modpack ID is required for listing mods')
     }
 
     let orderByClause = desc(modpacksMods.createdAt)
@@ -108,7 +111,7 @@ export class ModRepository {
       })
       .from(mods)
       .innerJoin(modpacksMods, eq(mods.id, modpacksMods.modId))
-      .where(and(...conditions, eq(modpacksMods.modpackId, params.modpackId)))
+      .where(and(...conditions))
       .orderBy(orderByClause)
       .limit(limit)
       .offset(offset)
@@ -117,7 +120,7 @@ export class ModRepository {
       .select({ count: count() })
       .from(mods)
       .innerJoin(modpacksMods, eq(mods.id, modpacksMods.modId))
-      .where(and(...conditions, eq(modpacksMods.modpackId, params.modpackId)))
+      .where(and(...conditions))
       .then((res) => res[0].count)
 
     return {
