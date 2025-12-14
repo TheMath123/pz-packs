@@ -66,10 +66,8 @@ export function ModCard({ data, modpackId, canManage }: ModCardProps) {
           <ModDetail data={data} />
         </div>
 
-        <Separator className="w-full opacity-40" />
-
-        <div className="flex flex-row justify-between items-end w-full gap-4 flex-wrap">
-          <div className="flex flex-col gap-1 items-start">
+        <div className="flex flex-row justify-between items-end w-full gap-2 flex-wrap">
+          <div className="flex flex-col items-start">
             <ModMapFolderDisplay data={data} />
             <ModIdsDisplay data={data} />
             <ModRequiredModsDisplay data={data} />
