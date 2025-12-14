@@ -141,7 +141,6 @@ export class ModpackRepository {
 
   /**
    * Find modpack with its members (active only)
-   * @deprecated Use modpackMemberRepository.findMembers instead
    */
   async findWithMembers(id: string): Promise<
     | (DModpack & {
