@@ -1,0 +1,46 @@
+import { modpackImportQueue } from '@/infra/queue/modpack-import/queue'
+import { ApiResponse } from '@/utils'
+
+interface GetImportModpackStatusControllerParams {
+  params: {
+    id: string // modpackId
+  }
+}
+
+export class GetImportModpackStatusController {
+  async handle({ params }: GetImportModpackStatusControllerParams) {
+    const { id: modpackId } = params
+    const jobId = `import-modpack-${modpackId}`
+
+    const job = await modpackImportQueue.getJob(jobId)
+
+    if (!job) {
+      return new ApiResponse({ status: 'idle' }, 200)
+    }
+
+    const state = await job.getState()
+    const isFinished = (await job.isCompleted()) || (await job.isFailed())
+
+    // If it's finished, we might want to return the result or error
+    let result = null
+    let error = null
+
+    if (await job.isCompleted()) {
+      result = job.returnvalue
+    }
+
+    if (await job.isFailed()) {
+      error = job.failedReason
+    }
+
+    return new ApiResponse(
+      {
+        status: state,
+        progress: job.progress,
+        result,
+        error,
+      },
+      200,
+    )
+  }
+}

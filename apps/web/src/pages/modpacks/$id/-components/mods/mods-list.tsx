@@ -1,6 +1,7 @@
 import { ModpackFilters } from '@/components/modpack/filters/modpack-filters'
 import { PaginationControls } from '@/components/pagination'
 import { useListModpackMods } from '@/hooks/modpack/mod/use-list-modpack-mods'
+import { useImportModpackStatus } from '@/hooks/modpack/use-import-modpack-status'
 import { useFilters } from '@/hooks/use-filters'
 import type { ModsFiltersSchema } from '../../index'
 import { AddModDialog } from '../add-mod/add-mod-dialog'
@@ -17,6 +18,12 @@ export function ModsList({ modpackId, canManage }: ModsListProps) {
     useFilters<ModsFiltersSchema>()
 
   const { data, isLoading, error } = useListModpackMods(filters, modpackId)
+  const { data: importStatus } = useImportModpackStatus(modpackId)
+
+  const isImporting =
+    importStatus?.status === 'active' ||
+    importStatus?.status === 'waiting' ||
+    importStatus?.status === 'delayed'
 
   if (error) {
     return (
@@ -34,9 +41,18 @@ export function ModsList({ modpackId, canManage }: ModsListProps) {
             : 'Mods'}
         </h2>
         {canManage && (
-          <div className="flex gap-2">
-            <ImportModpackDialog modpackId={modpackId} />
-            <AddModDialog modpackId={modpackId} />
+          <div className="flex gap-2 items-center">
+            {isImporting ? (
+              <div className="flex items-center gap-2 px-3 py-2 bg-muted rounded-md text-sm text-muted-foreground border border-border">
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                Importing mods from Steam...
+              </div>
+            ) : (
+              <>
+                <ImportModpackDialog modpackId={modpackId} />
+                <AddModDialog modpackId={modpackId} />
+              </>
+            )}
           </div>
         )}
       </div>

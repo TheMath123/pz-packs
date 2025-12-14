@@ -1,5 +1,5 @@
 import { env } from '@/env'
-import { headers } from '../helpers'
+import { headers } from '../../helpers'
 
 interface ImportModpackParams {
   id: string

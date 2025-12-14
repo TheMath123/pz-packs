@@ -60,11 +60,18 @@ export class ImportModpackController {
     }
 
     try {
-      const job = await modpackImportQueue.add('import-modpack', {
-        modpackId,
-        steamUrl,
-        userId: user.id,
-      })
+      const jobId = `import-modpack-${modpackId}`
+      const job = await modpackImportQueue.add(
+        'import-modpack',
+        {
+          modpackId,
+          steamUrl,
+          userId: user.id,
+        },
+        {
+          jobId,
+        },
+      )
 
       return new ApiResponse(
         {

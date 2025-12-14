@@ -2,6 +2,7 @@ import { addModInModpackSchema } from '@/domain/mod/validation/add-mod-in-modpac
 import { modpackController } from '@/domain/modpack/controler'
 import { makeAddModController } from '@/domain/modpack/factories/make-add-mod-controller'
 import { makeCreateModpackController } from '@/domain/modpack/factories/make-create-modpack-controller'
+import { makeGetImportModpackStatusController } from '@/domain/modpack/factories/make-get-import-modpack-status-controller'
 import { makeImportModpackController } from '@/domain/modpack/factories/make-import-modpack-controller'
 import { makeListModpacksController } from '@/domain/modpack/factories/make-list-modpacks-controller'
 import {
@@ -222,6 +223,25 @@ export function modpacksRoutes(app: Server) {
           tags: ['Mods'],
           description: 'Add a mod to the modpack (owner/member only)',
           summary: 'Add Mod',
+        },
+      },
+    )
+
+    // Get import status
+    route.get(
+      '/:id/import/status',
+      async ({ status, params }) => {
+        const controller = makeGetImportModpackStatusController()
+        const res = await controller.handle({ params })
+        return status(res.status, res.value)
+      },
+      {
+        auth: true,
+        params: modpackIdParamSchema,
+        detail: {
+          tags: ['Modpacks'],
+          description: 'Get the status of the modpack import job',
+          summary: 'Get Import Status',
         },
       },
     )

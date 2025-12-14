@@ -1,6 +1,6 @@
 import { toast } from '@org/design-system/components/ui/sonner'
-import { useMutation } from '@tanstack/react-query'
-import { ModpackService } from '@/services/modpack'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { ModpackImportService } from '@/services/modpack/import'
 
 interface ImportModpackParams {
   modpackId: string
@@ -8,11 +8,16 @@ interface ImportModpackParams {
 }
 
 export function useImportModpack() {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: ({ modpackId, steamUrl }: ImportModpackParams) =>
-      ModpackService.import({ id: modpackId, data: { steamUrl } }),
-    onSuccess: (data: any) => {
+      ModpackImportService.import({ id: modpackId, data: { steamUrl } }),
+    onSuccess: (data: any, variables) => {
       toast.success(data.message || 'Import started in background')
+      queryClient.invalidateQueries({
+        queryKey: ['import-modpack-status', variables.modpackId],
+      })
     },
     onError: (error) => {
       toast.error(
