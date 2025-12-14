@@ -19,7 +19,6 @@ export class GetImportModpackStatusController {
     }
 
     const state = await job.getState()
-    const isFinished = (await job.isCompleted()) || (await job.isFailed())
 
     // If it's finished, we might want to return the result or error
     let result = null
