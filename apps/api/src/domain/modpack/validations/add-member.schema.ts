@@ -1,9 +1,7 @@
 import { z } from '@org/validation/zod'
 
 export const addMemberSchema = z.object({
-  email: z
-    .string({ error: 'Email is required' })
-    .email({ error: 'Invalid email format' }),
+  email: z.email({ error: 'Invalid email format' }),
   permission: z
     .array(z.string({ error: 'Invalid permission format' }))
     .min(1, 'At least one permission is required'),
