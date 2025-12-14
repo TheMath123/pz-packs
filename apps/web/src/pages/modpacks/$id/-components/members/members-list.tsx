@@ -59,9 +59,13 @@ export function MembersList({
             key={member.id}
             member={member}
             modpackId={modpackId}
-            canRemove={canManageMembers}
+            canRemove={canManageMembers && !member.permission.includes('owner')}
             trigger={(props) => (
-              <MemberAvatarButton member={member} {...props} />
+              <MemberAvatarButton
+                member={member}
+                readOnly={member.permission.includes('owner')}
+                {...props}
+              />
             )}
           />
         )
@@ -79,7 +83,7 @@ export function MembersList({
               <div className="px-2 py-1.5 text-sm font-semibold">
                 All Members ({members.length})
               </div>
-              {members.slice(5).map((member) => (
+              {members.slice(5).map((member, index) => (
                 <div key={member.id} className="flex items-center gap-3 p-2">
                   <MemberAvatarButton
                     member={member}
@@ -98,7 +102,9 @@ export function MembersList({
                     <RemoveMemberDialog
                       modpackId={modpackId}
                       member={member}
-                      canRemove={canManageMembers}
+                      canRemove={
+                        canManageMembers || !member.permission.includes('owner')
+                      }
                       trigger={(props) => (
                         <Button
                           variant="ghost"
