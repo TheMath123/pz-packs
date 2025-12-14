@@ -1,5 +1,6 @@
 import { addModInModpackSchema } from '@/domain/mod/validation/add-mod-in-modpack.schema'
 import { modpackController } from '@/domain/modpack/controler'
+import { makeAddModController } from '@/domain/modpack/factories/make-add-mod-controller'
 import { makeCreateModpackController } from '@/domain/modpack/factories/make-create-modpack-controller'
 import { makeListModpacksController } from '@/domain/modpack/factories/make-list-modpacks-controller'
 import {
@@ -207,7 +208,8 @@ export function modpacksRoutes(app: Server) {
     route.post(
       '/:id/mods',
       async ({ status, params, body, user }) => {
-        const res = await modpackController.addMod({ params, body, user })
+        const controller = makeAddModController()
+        const res = await controller.handle({ params, body, user })
         return status(res.status, res.value)
       },
       {

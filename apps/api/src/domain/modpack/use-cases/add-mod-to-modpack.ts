@@ -1,7 +1,12 @@
-import { modpackModRepository } from '@org/database'
-import { upsertModFromSteamService } from '@/domain/mod/services/upsert-mod-from-steam'
+import type { ModpackModRepository } from '@org/database/repository/modpack-mod-repository'
+import type { UpsertModFromSteamUseCase } from '@/domain/mod/use-cases/upsert-mod-from-steam'
 
-export class AddModToModpackService {
+export class AddModToModpackUseCase {
+  constructor(
+    private modpackModRepository: ModpackModRepository,
+    private upsertModFromSteamUseCase: UpsertModFromSteamUseCase,
+  ) {}
+
   async execute(
     workshopId: string,
     modpackId: string,
@@ -11,23 +16,23 @@ export class AddModToModpackService {
     if (processedWorkshopIds.has(workshopId)) return
     processedWorkshopIds.add(workshopId)
 
-    const mod = await upsertModFromSteamService.execute(workshopId)
+    const mod = await this.upsertModFromSteamUseCase.execute(workshopId)
 
     if (!mod) return
 
     // Add to modpack if not exists
-    const existingModpackMod = await modpackModRepository.findMod(
+    const existingModpackMod = await this.modpackModRepository.findMod(
       modpackId,
       mod.id,
     )
 
     if (existingModpackMod) {
       if (!existingModpackMod.isActive) {
-        await modpackModRepository.reactivateMod(modpackId, mod.id)
+        await this.modpackModRepository.reactivateMod(modpackId, mod.id)
         addedMods.push(mod.name)
       }
     } else {
-      await modpackModRepository.addMod({ modpackId, modId: mod.id })
+      await this.modpackModRepository.addMod({ modpackId, modId: mod.id })
       addedMods.push(mod.name)
     }
 
@@ -46,5 +51,3 @@ export class AddModToModpackService {
     }
   }
 }
-
-export const addModToModpackService = new AddModToModpackService()
