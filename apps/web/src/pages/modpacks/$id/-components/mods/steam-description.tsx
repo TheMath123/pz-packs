@@ -35,13 +35,13 @@ export function SteamDescription({ content }: SteamDescriptionProps) {
 
 function parseBBCode(input: string): React.ReactNode {
   const tagRegex =
-    /(\[(?:\/)?(?:h1|h2|h3|b|i|u|s|img|url|quote|list|hr|\*)(?:=[^\]]+)?\])/gi
+    /(\[(?:\/)?(?:h1|h2|h3|b|i|u|s|img|url|quote|list|hr|code|\*)(?:=[^\]]+)?\])/gi
   const parts = input.split(tagRegex)
 
   const tokens: Token[] = parts
     .map((part) => {
       const match = part.match(
-        /^\[(\/?)(h1|h2|h3|b|i|u|s|img|url|quote|list|hr|\*)(?:=(.+))?\]$/i,
+        /^\[(\/?)(h1|h2|h3|b|i|u|s|img|url|quote|list|hr|code|\*)(?:=(.+))?\]$/i,
       )
       if (match) {
         return {
@@ -199,6 +199,15 @@ function renderTag(
         >
           {children}
         </blockquote>
+      )
+    case 'code':
+      return (
+        <pre
+          key={key}
+          className="bg-muted p-3 rounded-md font-mono text-sm overflow-x-auto my-4 whitespace-pre wrap-break-word"
+        >
+          {children}
+        </pre>
       )
     case 'url': {
       let href = param
