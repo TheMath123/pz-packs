@@ -1,7 +1,8 @@
 import { useAppForm } from '@org/design-system/components/ui/form-tanstack'
+import { addModInModpackSchema } from '@org/validation/forms/mod'
 import { useEffect } from 'react'
 import { SubmitButton, TextField } from '@/components/form'
-import { useAddModpackMember } from '@/hooks'
+import { useAddModInModpack } from '@/hooks/modpack/mod'
 
 interface AddModFormProps {
   onSuccess: () => void
@@ -9,27 +10,27 @@ interface AddModFormProps {
 }
 
 export function AddModForm({ onSuccess, modpackId }: AddModFormProps) {
-  const addMod = useAddModpackMod()
+  const addModInModpack = useAddModInModpack()
   const form = useAppForm({
     defaultValues: {
-      email: '',
+      modAtribute: '',
     },
     validators: {
-      onSubmit: addModFormSchema,
+      onSubmit: addModInModpackSchema,
     },
     onSubmit: async ({ value }) =>
-      await addMember.mutateAsync({
+      await addModInModpack.mutateAsync({
         modpackId,
-        email: value.email,
+        modAtribute: value.modAtribute,
       }),
   })
 
   useEffect(() => {
-    if (addMember.isSuccess) {
+    if (addModInModpack.isSuccess) {
       form.reset()
       onSuccess()
     }
-  }, [addMember.isSuccess])
+  }, [addModInModpack.isSuccess])
 
   return (
     <form
@@ -43,15 +44,15 @@ export function AddModForm({ onSuccess, modpackId }: AddModFormProps) {
       <TextField
         form={form}
         name="modAtribute"
-        label="Mod ID or Steam URL *"
-        placeholder="123456 or https://steamcommunity.com/sharedfiles/filedetails/?id=123456"
-        inputMode="email"
-        disabled={addMember.isPending}
+        label="Workshop ID or Steam URL *"
+        placeholder="Enter the mod's Workshop ID or Steam URL"
+        inputMode="text"
+        disabled={addModInModpack.isPending}
       />
 
       <SubmitButton
-        isLoading={addMember.isPending}
-        label="Add Member"
+        isLoading={addModInModpack.isPending}
+        label="Add Mod"
         loadingLabel="Adding.."
       />
     </form>

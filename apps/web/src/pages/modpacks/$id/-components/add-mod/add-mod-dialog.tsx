@@ -9,18 +9,17 @@ import {
 } from '@org/design-system/components/ui/dialog'
 import { PlusSquareIcon } from '@org/design-system/components/ui/icons'
 import { useState } from 'react'
-import type { IModpackDTO } from '@/services/modpack/dtos'
-import { UpdateModpackForm } from '../update/update-modpack-form'
+import { AddModForm } from './add-mod-form'
 
 interface AddModDialogProps {
-  modpack: IModpackDTO
+  modpackId: string
 }
 
-export function AddModDialog({ modpack }: AddModDialogProps) {
-  const [editDialogOpen, setEditDialogOpen] = useState(false)
+export function AddModDialog({ modpackId }: AddModDialogProps) {
+  const [open, setOpen] = useState(false)
 
   return (
-    <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
           <Button>
@@ -28,16 +27,13 @@ export function AddModDialog({ modpack }: AddModDialogProps) {
             Add Mod
           </Button>
         }
-      />
+      ></DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Add Mod</DialogTitle>
-          <DialogDescription>Update your modpack information</DialogDescription>
+          <DialogDescription>Add a mod to your modpack</DialogDescription>
         </DialogHeader>
-        <UpdateModpackForm
-          modpack={modpack}
-          onSuccess={() => setEditDialogOpen(false)}
-        />
+        <AddModForm modpackId={modpackId} onSuccess={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   )

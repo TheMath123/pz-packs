@@ -1,16 +1,14 @@
 import { Button } from '@org/design-system/components/ui/button'
 import { ButtonGroup } from '@org/design-system/components/ui/button-group.tsx'
-import {
-  PlusSquareIcon,
-  SteamLogoIcon,
-} from '@org/design-system/components/ui/icons'
+import { SteamLogoIcon } from '@org/design-system/components/ui/icons'
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { ModsGrid } from '@/components/mod/mods-grid.tsx'
 import { ModpackVisibilityBadge } from '@/components/modpack/index.ts'
 import { ModpackVerifiedBadge } from '@/components/modpack/modpack-verified-badge.tsx'
 import { useCanManageModpack, useModpack } from '@/hooks'
+import { AddModDialog } from './add-mod/add-mod-dialog'
 import { ArchiveModpackDialog } from './archive-mobdpack-dialog.tsx'
 import { Members } from './members/members.tsx'
+import { ModsList } from './mods/mods-list'
 import { UpdateModpackDialog } from './update/update-modpack-dialog.tsx'
 
 export function MyModpacksPages() {
@@ -102,6 +100,7 @@ export function MyModpacksPages() {
               )}
             </ButtonGroup>
             <ButtonGroup>
+              {canManage && <AddModDialog modpackId={modpack.id} />}
               <UpdateModpackDialog modpack={modpack} />
               <ArchiveModpackDialog modpack={modpack} />
             </ButtonGroup>
@@ -109,8 +108,7 @@ export function MyModpacksPages() {
         </div>
       </div>
       <div>
-        <div className="flex justify-end"></div>
-        <ModsGrid mods={[]} />
+        <ModsList modpackId={modpack.id} canManage={canManage} />
       </div>
     </div>
   )

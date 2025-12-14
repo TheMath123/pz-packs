@@ -14,10 +14,11 @@ export async function listPublicModpacksService(
     headers: { ...headers },
   })
 
+  const data = await res.json()
   if (res.status !== 200) {
-    const { error } = await res.json()
+    const { error } = data
     throw new Error(error.message ?? 'We have a problem listing the modpacks')
   }
 
-  return (await res.json()) as PaginatedResponse<IModpackDTO>
+  return data as PaginatedResponse<IModpackDTO>
 }

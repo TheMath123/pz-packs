@@ -3,19 +3,19 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ModpackModsService } from '@/services/modpack/mods'
 import { modpackModsKeys } from './modpack-mods-keys'
 
-interface AddModParams {
+interface RemoveModParams {
   modpackId: string
-  modAtribute: string
+  modId: string
 }
 
-export function useAddModInModpack() {
+export function useRemoveModFromModpack() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ modpackId, modAtribute }: AddModParams) =>
-      ModpackModsService.add(modpackId, modAtribute),
+    mutationFn: ({ modpackId, modId }: RemoveModParams) =>
+      ModpackModsService.remove(modpackId, modId),
     onSuccess: (_, variables) => {
-      toast.success('Mod added successfully')
+      toast.success('Mod removed successfully')
       queryClient.invalidateQueries({
         queryKey: modpackModsKeys.list(variables.modpackId),
       })
@@ -23,7 +23,7 @@ export function useAddModInModpack() {
     onError: (error) => {
       toast.error(
         (error as Error).message ||
-          'Failed to add mod. Please try again later.',
+          'Failed to remove mod. Please try again later.',
       )
     },
   })
