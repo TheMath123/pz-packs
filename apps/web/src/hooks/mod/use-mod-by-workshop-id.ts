@@ -4,7 +4,7 @@ import { ModService } from '@/services/mod'
 import type { IModDTO } from '@/services/mod/dtos'
 import { modKeys } from './mod-keys'
 
-export function useWorkshopMod(
+export function useModByWorkshopId(
   workshopId: string,
   options?: Omit<UseQueryOptions<IModDTO>, 'queryKey' | 'queryFn'>,
 ): UseQueryResult<IModDTO> {

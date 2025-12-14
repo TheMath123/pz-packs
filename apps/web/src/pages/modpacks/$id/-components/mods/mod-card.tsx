@@ -1,3 +1,4 @@
+import { CopyButton } from '@org/design-system/components/ui/button-copy'
 import { Card, CardTitle } from '@org/design-system/components/ui/card'
 import {
   Popover,
