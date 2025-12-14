@@ -4,7 +4,7 @@ import { headers } from '../../helpers'
 export interface ImportStatusResponse {
   status: 'active' | 'waiting' | 'completed' | 'failed' | 'delayed' | 'idle'
   progress: number
-  result?: any
+  result?: unknown
   error?: string
 }
 

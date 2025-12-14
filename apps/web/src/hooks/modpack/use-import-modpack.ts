@@ -13,7 +13,7 @@ export function useImportModpack() {
   return useMutation({
     mutationFn: ({ modpackId, steamUrl }: ImportModpackParams) =>
       ModpackImportService.import({ id: modpackId, data: { steamUrl } }),
-    onSuccess: (data: any, variables) => {
+    onSuccess: (data, variables) => {
       toast.success(data.message || 'Import started in background')
       queryClient.invalidateQueries({
         queryKey: ['import-modpack-status', variables.modpackId],
