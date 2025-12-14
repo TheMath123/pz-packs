@@ -4,7 +4,8 @@ import { SteamLogoIcon } from '@org/design-system/components/ui/icons'
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { ModpackVisibilityBadge } from '@/components/modpack/index.ts'
 import { ModpackVerifiedBadge } from '@/components/modpack/modpack-verified-badge.tsx'
-import { useCanManageModpack, useModpack } from '@/hooks'
+import { useCanManageModpack, useModpack, usePublicModpack } from '@/hooks'
+import { authClient } from '@/lib/auth.ts'
 import { AddModDialog } from './add-mod/add-mod-dialog'
 import { ArchiveModpackDialog } from './archive-mobdpack-dialog.tsx'
 import { Members } from './members/members.tsx'
@@ -12,9 +13,11 @@ import { ModsList } from './mods/mods-list'
 import { UpdateModpackDialog } from './update/update-modpack-dialog.tsx'
 
 export function MyModpacksPages() {
+  const { data } = authClient.useSession()
   const { id } = useParams({ strict: false }) as { id: string }
   const navigate = useNavigate()
-  const { data: modpack, isLoading, error } = useModpack(id)
+  const useList = data ? useModpack : usePublicModpack
+  const { data: modpack, isLoading, error } = useList(id)
   const canManage = useCanManageModpack(modpack?.owner || '')
 
   if (isLoading) {
@@ -99,11 +102,13 @@ export function MyModpacksPages() {
                 />
               )}
             </ButtonGroup>
-            <ButtonGroup>
-              {canManage && <AddModDialog modpackId={modpack.id} />}
-              <UpdateModpackDialog modpack={modpack} />
-              <ArchiveModpackDialog modpack={modpack} />
-            </ButtonGroup>
+            {canManage && (
+              <ButtonGroup>
+                <AddModDialog modpackId={modpack.id} />
+                <UpdateModpackDialog modpack={modpack} />
+                <ArchiveModpackDialog modpack={modpack} />
+              </ButtonGroup>
+            )}
           </ButtonGroup>
         </div>
       </div>
