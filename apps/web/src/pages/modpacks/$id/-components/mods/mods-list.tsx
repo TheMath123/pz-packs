@@ -3,6 +3,7 @@ import { PaginationControls } from '@/components/pagination'
 import { useListModpackMods } from '@/hooks/modpack/mod/use-list-modpack-mods'
 import { useFilters } from '@/hooks/use-filters'
 import type { ModsFiltersSchema } from '../../index'
+import { AddModDialog } from '../add-mod/add-mod-dialog'
 import { ModCard } from './mod-card'
 
 interface ModsListProps {
@@ -27,6 +28,7 @@ export function ModsList({ modpackId, canManage }: ModsListProps) {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <h2 className="text-xl font-semibold">Mods</h2>
+        <AddModDialog modpackId={modpackId} />
       </div>
 
       <ModpackFilters

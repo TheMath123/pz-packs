@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@org/design-system/components/ui/dialog'
-import { PlusSquareIcon } from '@org/design-system/components/ui/icons'
+import { PlusIcon } from '@org/design-system/components/ui/icons'
 import { useState } from 'react'
 import { AddModForm } from './add-mod-form'
 
@@ -23,7 +23,7 @@ export function AddModDialog({ modpackId }: AddModDialogProps) {
       <DialogTrigger
         render={
           <Button className="flex flex-row items-center tracking-wide">
-            <PlusSquareIcon className="w-5 h-5" weight="bold" />
+            <PlusIcon className="w-4 h-4 mr-1" weight="bold" />
             Add Mod
           </Button>
         }
