@@ -8,6 +8,7 @@ import {
   ilike,
   inArray,
   or,
+  sql,
 } from 'drizzle-orm'
 import { database } from '../index'
 import type { DMod } from '../schemas'
@@ -66,8 +67,14 @@ export class ModRepository {
   }
 
   async list(params: ListModsParams) {
-    const page = params.page || 1
-    const limit = params.limit || 10
+    const {
+      page = 1,
+      limit = 10,
+      search,
+      modpackId,
+      sortBy = 'createdAt',
+      sortOrder = 'desc',
+    } = params
     const offset = (page - 1) * limit
 
     const conditions = [
@@ -75,14 +82,14 @@ export class ModRepository {
       eq(modpacksMods.isActive, true),
     ]
 
-    if (params.modpackId) {
-      conditions.push(eq(modpacksMods.modpackId, params.modpackId))
+    if (modpackId) {
+      conditions.push(eq(modpacksMods.modpackId, modpackId))
     }
 
-    if (params.search) {
+    if (search) {
       const searchCondition = or(
-        ilike(mods.name, `%${params.search}%`),
-        ilike(mods.workshopId, `%${params.search}%`),
+        ilike(mods.name, `%${search}%`),
+        ilike(mods.workshopId, `%${search}%`),
       )
       if (searchCondition) {
         conditions.push(searchCondition)
@@ -91,17 +98,23 @@ export class ModRepository {
 
     let orderByClause = desc(modpacksMods.createdAt)
 
-    if (params.sortBy === 'createdAt') {
+    if (sortBy === 'createdAt') {
       orderByClause =
-        params.sortOrder === 'asc'
+        sortOrder === 'asc'
           ? asc(modpacksMods.createdAt)
           : desc(modpacksMods.createdAt)
-    } else if (params.sortBy === 'updatedAt') {
+    } else if (sortBy === 'updatedAt') {
       orderByClause =
-        params.sortOrder === 'asc'
+        sortOrder === 'asc'
           ? asc(modpacksMods.updatedAt)
           : desc(modpacksMods.updatedAt)
     }
+
+    const [{ count: total }] = await database
+      .select({ count: sql<number>`cast(count(*) as integer)` })
+      .from(mods)
+      .innerJoin(modpacksMods, eq(mods.id, modpacksMods.modId))
+      .where(and(...conditions))
 
     const data = await database
       .select({
@@ -116,23 +129,18 @@ export class ModRepository {
       .limit(limit)
       .offset(offset)
 
-    const total = await database
-      .select({ count: count() })
-      .from(mods)
-      .innerJoin(modpacksMods, eq(mods.id, modpacksMods.modId))
-      .where(and(...conditions))
-      .then((res) => res[0].count)
-
     return {
       data: data.map((row) => ({
         ...row.mod,
         addedAt: row.addedAt,
         updatedAt: row.updatedAt,
       })),
-      total,
-      page,
-      limit,
-      totalPages: Math.ceil(total / limit),
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
     }
   }
 }
