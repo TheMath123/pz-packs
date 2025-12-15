@@ -66,4 +66,6 @@ export function modsRoutes(app: Server) {
 
     return route
   })
+
+  return app
 }

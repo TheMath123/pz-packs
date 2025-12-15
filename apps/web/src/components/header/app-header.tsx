@@ -4,6 +4,7 @@ import { Link, useLocation } from '@tanstack/react-router'
 import { authClient } from '@/lib/auth'
 import { Anchor } from '../anchor'
 import { NavUser } from './nav-user'
+import { NotificationPopover } from './notification-popover'
 
 export function AppHeader() {
   const { theme } = useTheme()
@@ -41,7 +42,10 @@ export function AppHeader() {
             </Anchor>
           ) : null}
         </div>
-        <NavUser />
+        <div className="flex items-center gap-2">
+          {session && <NotificationPopover />}
+          <NavUser />
+        </div>
       </div>
     </header>
   )
