@@ -29,30 +29,36 @@ export function Notification({ data }: { data: INotificationDTO }) {
       type="button"
       key={data.id}
       className={cn(
-        'p-4 flex gap-3 hover:bg-muted/50 transition-colors cursor-pointer',
+        'p-4 hover:bg-muted/50 transition-all duration-200 ease-in-out cursor-pointer',
+        'flex flex-row items-start w-full gap-4 justify-between relative border-b border-border/10',
         !data.isRead && 'bg-muted/20',
       )}
       onClick={() => !data.isRead && handleMarkAsRead(data.id)}
     >
-      <div className="mt-1">{icons[data.type] || icons.default}</div>
-      <div className="flex-1 space-y-1">
-        <p
+      <div className="ml-2">{icons[data.type] || icons.default}</div>
+
+      <div className="flex flex-col items-start text-left gap-4">
+        <h3
           className={cn(
-            'text-sm font-medium leading-none',
+            'text-sm font-medium leading-none flex flex-row gap-2 items-center',
             !data.isRead && 'font-bold',
           )}
         >
           {data.title}
+        </h3>
+        <p className="text-sm text-muted-foreground text-left leading-relaxed ">
+          {data.content}
         </p>
-        <p className="text-sm text-muted-foreground">{data.content}</p>
-        <p className="text-xs text-muted-foreground">
+        <span className="text-xs text-muted-foreground">
           {formatDistanceToNow(new Date(data.createdAt), {
             addSuffix: true,
           })}
-        </p>
+        </span>
       </div>
-      {!data.isRead && (
-        <div className="w-2 h-2 bg-blue-500 rounded-full mt-2" />
+      {!data.isRead ? (
+        <div className="absolute top-3 right-3 w-2 h-2 bg-blue-500 rounded-full mt-2" />
+      ) : (
+        <div />
       )}
     </button>
   )

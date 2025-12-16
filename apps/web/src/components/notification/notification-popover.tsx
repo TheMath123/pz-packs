@@ -19,7 +19,7 @@ export function NotificationPopover() {
         render={<NotificationButton unreadCount={unreadCount} />}
       ></PopoverTrigger>
       <PopoverPositioner align="end">
-        <PopoverContent className="w-80 p-0">
+        <PopoverContent className="w-96 p-0">
           <div className="p-4 border-b">
             <h4 className="font-semibold leading-none">Notifications</h4>
             <p className="text-sm text-muted-foreground mt-1">
@@ -36,7 +36,7 @@ export function NotificationPopover() {
                 No notifications
               </div>
             ) : (
-              <div className="divide-y">
+              <div>
                 {notifications?.map((notification) => (
                   <Notification data={notification} key={notification.id} />
                 ))}

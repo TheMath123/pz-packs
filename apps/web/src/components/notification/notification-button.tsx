@@ -9,7 +9,7 @@ export function NotificationButton({
   unreadCount: number
 }) {
   return (
-    <Button size="icon" variant="outline" className="relative" {...props}>
+    <Button size="icon" variant="ghost" className="relative" {...props}>
       <BellIcon className="w-5 h-5" weight="bold" />
       {unreadCount > 0 && (
         <Badge
