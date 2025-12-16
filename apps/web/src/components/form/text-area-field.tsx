@@ -43,7 +43,7 @@ export function TextAreaField({
               {...inputProps}
             />
           </field.Control>
-          <div className="text-muted-foreground text-sm absolute bottom-2 right-3 font-medium">
+          <div className="text-muted-foreground text-sm absolute bottom-2 right-3 font-medium bg-background/80 rounded-md">
             <span
               className={cn(
                 (field.state.value?.length || 0) > maxLength * 0.5 &&
