@@ -12,7 +12,7 @@ export function AppHeader() {
   const { pathname } = useLocation()
 
   return (
-    <header className="py-2 border-b-2">
+    <header className="py-2 border-b-2 bg-background">
       <div className="container flex justify-between items-center gap-2">
         <Link
           to="/"

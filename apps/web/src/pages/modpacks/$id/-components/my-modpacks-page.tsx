@@ -60,9 +60,9 @@ export function MyModpacksPages() {
   }
 
   return (
-    <div className="container mx-auto py-8 flex flex-col gap-6">
-      <div className="flex flex-row gap-4 justify-between mb-6 flex-wrap">
-        <div className="flex flex-row gap-4 items-start justify-center flex-wrap">
+    <div className="container mx-auto py-8 flex flex-col gap-6 relative">
+      <div className="flex flex-row gap-4 items-end justify-between mb-6 flex-wrap">
+        <div className="flex flex-row gap-4 items-start justify-center flex-wrap ">
           {modpack.avatarUrl && (
             <img
               src={modpack.avatarUrl || ''}
@@ -112,8 +112,12 @@ export function MyModpacksPages() {
           </ButtonGroup>
           {canManage && (
             <ButtonGroup>
-              <UpdateModpackDialog modpack={modpack} />
-              <ArchiveModpackDialog modpack={modpack} />
+              <ButtonGroup>
+                <UpdateModpackDialog modpack={modpack} />
+              </ButtonGroup>
+              <ButtonGroup>
+                <ArchiveModpackDialog modpack={modpack} />
+              </ButtonGroup>
             </ButtonGroup>
           )}
         </ButtonGroup>

@@ -23,7 +23,7 @@ export function ModCard({ data, modpackId, canManage }: ModCardProps) {
 
   return (
     <Card className="flex flex-row items-start p-0 overflow-hidden gap-0">
-      <div className="relative bg-primary/30 dark:bg-primary aspect-square h-32 flex items-center justify-center  text-muted-foreground/20 overflow-clip">
+      <div className="relative bg-primary/30 dark:bg-primary aspect-square h-32 flex items-center justify-center text-muted-foreground/20 overflow-clip">
         {data.avatarUrl ? (
           <img
             src={data.avatarUrl}
