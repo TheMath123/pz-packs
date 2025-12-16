@@ -3,8 +3,8 @@ import { useTheme } from '@org/design-system/providers'
 import { Link, useLocation } from '@tanstack/react-router'
 import { authClient } from '@/lib/auth'
 import { Anchor } from '../anchor'
+import { NotificationPopover } from '../notification/notification-popover'
 import { NavUser } from './nav-user'
-import { NotificationPopover } from './notification-popover'
 
 export function AppHeader() {
   const { theme } = useTheme()

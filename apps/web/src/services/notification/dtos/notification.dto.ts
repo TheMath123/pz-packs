@@ -1,4 +1,4 @@
-export interface Notification {
+export interface INotificationDTO {
   id: string
   userId: string
   title: string

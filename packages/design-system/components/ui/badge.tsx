@@ -27,6 +27,8 @@ const badgeVariants = cva('font-semibold rounded', {
       outline: 'outline-2 outline-foreground text-foreground',
       solid: 'bg-foreground text-background',
       surface: 'outline-2 bg-primary text-primary-foreground',
+      destructive:
+        'border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
     },
     size: {
       sm: 'px-2 py-1 text-xs',

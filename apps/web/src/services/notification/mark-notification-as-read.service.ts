@@ -1,6 +1,6 @@
 import { env } from '@/env'
 import { headers } from '../helpers'
-import type { Notification } from './dtos/notification.dto'
+import type { INotificationDTO } from './dtos/notification.dto'
 
 export async function markNotificationAsReadService(id: string) {
   const url = `${env.VITE_API_URL}/notifications/${id}/read`
@@ -20,5 +20,5 @@ export async function markNotificationAsReadService(id: string) {
     throw new Error(error.message ?? 'Failed to mark notification as read')
   }
 
-  return data as Notification
+  return data as INotificationDTO
 }

@@ -1,6 +1,6 @@
 import { env } from '@/env'
 import { headers } from '../helpers'
-import type { Notification } from './dtos/notification.dto'
+import type { INotificationDTO } from './dtos/notification.dto'
 
 export async function listNotificationsService() {
   const url = `${env.VITE_API_URL}/notifications`
@@ -20,5 +20,5 @@ export async function listNotificationsService() {
     throw new Error(error.message ?? 'Failed to list notifications')
   }
 
-  return data as Notification[]
+  return data as INotificationDTO[]
 }
