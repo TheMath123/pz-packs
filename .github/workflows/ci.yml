@@ -37,7 +37,7 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           cd apps/web
-          bunx vercel link --yes --project zomboid-web --token=$VERCEL_TOKEN
+          bunx vercel link --yes --project pz-packs --token=$VERCEL_TOKEN
           bunx vercel build --prod --yes --token=$VERCEL_TOKEN
           bunx vercel deploy --prod --prebuilt --token=$VERCEL_TOKEN
 
@@ -52,8 +52,8 @@ jobs:
           export PATH="$HOME/.fly/bin:$PATH"
 
           # Create app if it doesn't exist
-          if ! fly apps list -t "$FLY_API_TOKEN" | grep -q "zomboid-api"; then
-            fly apps create zomboid-api --org personal -t "$FLY_API_TOKEN"
+          if ! fly apps list -t "$FLY_API_TOKEN" | grep -q "pz-packs"; then
+            fly apps create pz-packs --org personal -t "$FLY_API_TOKEN"
           fi
 
           # Deploy
@@ -62,7 +62,7 @@ jobs:
           # Health check with retries
           for i in {1..6}; do
             sleep 10
-            if curl -f https://zomboid-api.fly.dev/health; then
+            if curl -f https://pz-packs.fly.dev/health; then
               echo "API is healthy!"
               exit 0
             fi
