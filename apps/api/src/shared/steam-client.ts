@@ -155,14 +155,24 @@ export class SteamClient {
       }
     }
 
-    const mapFolderMatches = [
-      ...cleanText.matchAll(/Map Folder:\s*([^\s\n<]+)/gi),
-    ].map((m) => m[1].trim())
+    const mapFolderSet = new Set<string>()
+    const mapFolderLines = cleanText.matchAll(/Map Folder:\s*([^\n<]+)/gi)
+    for (const match of mapFolderLines) {
+      if (match[1]) {
+        const folders = match[1].split(/[,;]/)
+        for (const folder of folders) {
+          const trimmed = folder.trim()
+          if (trimmed) {
+            mapFolderSet.add(trimmed)
+          }
+        }
+      }
+    }
 
     return {
       workshop_id: workshopIdMatch ? parseInt(workshopIdMatch[1], 10) : null,
       mod_id: modIdSet.size > 0 ? Array.from(modIdSet) : null,
-      map_folder: mapFolderMatches.length > 0 ? mapFolderMatches : null,
+      map_folder: mapFolderSet.size > 0 ? Array.from(mapFolderSet) : null,
     }
   }
 }
