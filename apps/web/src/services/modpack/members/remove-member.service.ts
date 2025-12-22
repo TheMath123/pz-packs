@@ -14,9 +14,9 @@ export async function removeModpackMemberService(
     body: JSON.stringify({ email }),
   })
 
+  const data = await res.json()
   if (res.status !== 200) {
-    const { error } = await res.json()
-    throw new Error(error.message ?? 'We have a problem adding this member')
+    throw new Error(data.message ?? 'We have a problem adding this member')
   }
-  return (await res.json()) as ArchiveSuccess
+  return data as ArchiveSuccess
 }

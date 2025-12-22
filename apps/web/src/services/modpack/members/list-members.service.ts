@@ -11,10 +11,10 @@ export async function listModpackMembersService(modpackId: string) {
     headers: { ...headers },
   })
 
+  const data = await res.json()
   if (res.status !== 200) {
-    const { error } = await res.json()
-    throw new Error(error.message ?? 'We have a problem listing the members')
+    throw new Error(data.message ?? 'We have a problem listing the members')
   }
 
-  return (await res.json()) as IMemberDTO[]
+  return data as IMemberDTO[]
 }

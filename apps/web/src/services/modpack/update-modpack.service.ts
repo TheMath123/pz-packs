@@ -16,10 +16,12 @@ export async function updateModpackService(
     body: JSON.stringify(data),
   })
 
+  const dataResponse = await res.json()
   if (res.status !== 200) {
-    const { error } = await res.json()
-    throw new Error(error.message ?? 'We have a problem updating this modpack')
+    throw new Error(
+      dataResponse.message ?? 'We have a problem updating this modpack',
+    )
   }
 
-  return (await res.json()) as IModpackDTO
+  return dataResponse as IModpackDTO
 }

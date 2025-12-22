@@ -28,10 +28,10 @@ export async function createModpackService(params: CreateModpackParams) {
     body: JSON.stringify(body),
   })
 
+  const data = await res.json()
   if (res.status !== 201) {
-    const { error } = await res.json()
-    throw new Error(error.message ?? 'We have a problem creating this modpack')
+    throw new Error(data.message ?? 'We have a problem creating this modpack')
   }
 
-  return (await res.json()) as IModpackDTO
+  return data as IModpackDTO
 }

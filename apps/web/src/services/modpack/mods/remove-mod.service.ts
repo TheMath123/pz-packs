@@ -13,8 +13,10 @@ export async function removeModFromModpackService(
     headers: { ...headers },
   })
 
+  const data = await res.json()
   if (res.status !== 204 && res.status !== 200) {
-    const { error } = await res.json()
-    throw new Error(error.message ?? 'We have a problem removing this mod')
+    throw new Error(data.message ?? 'We have a problem removing this mod')
   }
+
+  return data
 }

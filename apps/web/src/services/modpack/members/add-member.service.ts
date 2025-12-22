@@ -15,9 +15,9 @@ export async function addModpackMemberService(
     body: JSON.stringify({ email, permission: ['read'] }),
   })
 
+  const data = await res.json()
   if (res.status !== 201) {
-    const { error } = await res.json()
-    throw new Error(error.message ?? 'We have a problem adding this member')
+    throw new Error(data.message ?? 'We have a problem adding this member')
   }
-  return (await res.json()) as IModpackMemberDTO
+  return data as IModpackMemberDTO
 }

@@ -15,9 +15,9 @@ export async function addModToModpackService(
     body: JSON.stringify({ modAtribute }),
   })
 
+  const data = await res.json()
   if (res.status !== 201) {
-    const { error } = await res.json()
-    throw new Error(error.message ?? 'We have a problem adding this mod')
+    throw new Error(data.message ?? 'We have a problem adding this mod')
   }
-  return (await res.json()) as IRelationModModpackDTO
+  return data as IRelationModModpackDTO
 }

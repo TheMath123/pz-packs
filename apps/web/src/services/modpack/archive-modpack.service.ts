@@ -11,9 +11,9 @@ export async function archiveModpackService(id: string) {
     headers: { ...headers },
   })
 
+  const data = await res.json()
   if (res.status !== 200) {
-    const { error } = await res.json()
-    throw new Error(error.message ?? 'We have a problem archiving this modpack')
+    throw new Error(data.message ?? 'We have a problem archiving this modpack')
   }
-  return (await res.json()) as ArchiveSuccess
+  return data as ArchiveSuccess
 }
