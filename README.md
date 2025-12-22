@@ -2,9 +2,10 @@
 
 <div align="center">
 
-# Monorepo Template
+# PZ Packs
 
-Monorepo template for full-stack development with TypeScript, React, Bun, and Elysia.
+PZ Modpacks
+
 
 </div>
 
