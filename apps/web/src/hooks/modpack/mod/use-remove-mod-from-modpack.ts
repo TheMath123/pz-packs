@@ -1,6 +1,7 @@
 import { toast } from '@org/design-system/components/ui/sonner'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ModpackModsService } from '@/services/modpack/mods'
+import { modpackKeys } from '../modpack-keys'
 import { modpackModsKeys } from './modpack-mods-keys'
 
 interface RemoveModParams {
@@ -18,6 +19,9 @@ export function useRemoveModFromModpack() {
       toast.success('Mod removed successfully')
       queryClient.invalidateQueries({
         queryKey: modpackModsKeys.list(variables.modpackId, {}),
+      })
+      queryClient.invalidateQueries({
+        queryKey: modpackKeys.get(variables.modpackId),
       })
     },
     onError: (error) => {

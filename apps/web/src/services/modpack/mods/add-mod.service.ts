@@ -16,7 +16,8 @@ export async function addModToModpackService(
   })
 
   const data = await res.json()
-  if (res.status !== 201) {
+  console.log(res)
+  if (res.status !== 200) {
     throw new Error(data.message ?? 'We have a problem adding this mod')
   }
   return data as IRelationModModpackDTO
