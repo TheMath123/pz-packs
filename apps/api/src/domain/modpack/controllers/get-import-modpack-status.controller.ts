@@ -25,7 +25,11 @@ export class GetImportModpackStatusController {
     let error = null
 
     if (await job.isCompleted()) {
-      result = job.returnvalue
+      try {
+        result = job.returnvalue
+      } catch (e) {
+        console.error('Error getting job return value', e)
+      }
     }
 
     if (await job.isFailed()) {
