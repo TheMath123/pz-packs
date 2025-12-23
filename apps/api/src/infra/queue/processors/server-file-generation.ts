@@ -6,15 +6,15 @@ import type { ServerFileGenerationJobData } from '../server-file-generation/queu
 export const serverFileGenerationProcessor = async (
   job: Job<ServerFileGenerationJobData>,
 ) => {
-  console.log(
-    `[ServerFileGenerationProcessor] Processing job ${job.id} for export ${job.data.exportId}`,
-  )
+  // console.log(
+  //   `[ServerFileGenerationProcessor] Processing job ${job.id} for export ${job.data.exportId}`,
+  // )
 
   try {
     const generateServerFileUseCase = makeGenerateServerFileUseCase()
     await generateServerFileUseCase.execute(job.data.exportId)
 
-    console.log(`[ServerFileGenerationProcessor] Job ${job.id} completed.`)
+    // console.log(`[ServerFileGenerationProcessor] Job ${job.id} completed.`)
 
     // Notify success
     await notificationQueue.add('server-file-ready', {
@@ -29,10 +29,10 @@ export const serverFileGenerationProcessor = async (
       }),
     })
   } catch (error) {
-    console.error(
-      `[ServerFileGenerationProcessor] Job ${job.id} failed:`,
-      error,
-    )
+    // console.error(
+    //   `[ServerFileGenerationProcessor] Job ${job.id} failed:`,
+    //   error,
+    // )
 
     // Notify error
     await notificationQueue.add('server-file-error', {

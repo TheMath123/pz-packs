@@ -7,9 +7,9 @@ import { notificationQueue } from '../notification/queue'
 export const modpackImportProcessor = async (
   job: Job<ModpackImportJobData>,
 ) => {
-  console.log(
-    `[ModpackImportProcessor] Processing job ${job.id} for modpack ${job.data.modpackId}`,
-  )
+  // console.log(
+  //   `[ModpackImportProcessor] Processing job ${job.id} for modpack ${job.data.modpackId}`,
+  // )
 
   try {
     const modpackRepository = new ModpackRepository()
@@ -22,9 +22,9 @@ export const modpackImportProcessor = async (
       job.data.steamUrl,
     )
 
-    console.log(
-      `[ModpackImportProcessor] Job ${job.id} completed. Added ${result.addedMods.length} mods.`,
-    )
+    // console.log(
+    //   `[ModpackImportProcessor] Job ${job.id} completed. Added ${result.addedMods.length} mods.`,
+    // )
 
     // Notify success
     await notificationQueue.add('import-success', {
@@ -56,7 +56,7 @@ export const modpackImportProcessor = async (
 
     return result
   } catch (error) {
-    console.error(`[ModpackImportProcessor] Job ${job.id} failed:`, error)
+    // console.error(`[ModpackImportProcessor] Job ${job.id} failed:`, error)
 
     // Notify failure
     await notificationQueue.add('import-error', {
