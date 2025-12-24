@@ -37,7 +37,7 @@ function MyProfilePage() {
   return (
     <div className="container mx-auto py-10 flex justify-center">
       <Card className="w-full max-w-md">
-        <CardHeader className="flex flex-col items-center gap-4">
+        <CardHeader className="flex flex-col items-center gap-2">
           <Avatar className="h-24 w-24">
             <AvatarImage src={user.image || ''} alt={user.name} />
             <AvatarFallback className="text-2xl">
@@ -47,10 +47,7 @@ function MyProfilePage() {
           <CardTitle className="text-2xl font-bold">{user.name}</CardTitle>
         </CardHeader>
         <CardContent className="text-center space-y-2">
-          <div className="text-muted-foreground">
-            <span className="font-medium text-foreground">Email:</span>{' '}
-            {user.email}
-          </div>
+          <div className="text-muted-foreground">{user.email}</div>
           <div className="text-xs text-muted-foreground">
             {new Date(user.createdAt).toLocaleDateString()}
           </div>
