@@ -95,7 +95,11 @@ export function NavUser() {
               className="size-4.5 text-popover-foreground"
               weight="bold"
             />
-            <a href="https://github.com" target="_blank" rel="noreferrer">
+            <a
+              href="https://github.com/Greens-Organization/pz-packs"
+              target="_blank"
+              rel="noreferrer"
+            >
               Github
             </a>
           </DropdownMenuItem>
