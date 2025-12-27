@@ -27,7 +27,11 @@ export function ModpackFilters({
 
   return (
     <div className="flex flex-col md:flex-row gap-4 mb-6">
-      <SearchFilter onSearchChange={onSearchChange} value={search} />
+      <SearchFilter
+        onSearchChange={onSearchChange}
+        value={search}
+        placeholder="Search by mod name..."
+      />
 
       <div className="flex gap-2">
         <SortByFilter onSortByChange={handleSortByChange} value={sortBy} />
