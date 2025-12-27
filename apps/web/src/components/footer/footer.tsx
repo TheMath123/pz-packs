@@ -6,8 +6,8 @@ import { Anchor } from './anchor'
 
 export function AppFooter() {
   return (
-    <footer className="container mx-auto py-4 text-center text-sm text-muted-foreground flex flex-col gap-6 justify-between">
-      <nav className="flex flex-col gap-2 self-end">
+    <footer className="container mx-auto py-4 text-center text-sm text-muted-foreground flex flex-col gap-6 justify-between mt-4">
+      <nav className="flex flex-row gap-2 md:self-end">
         <Anchor
           href="https://discord.gg/AzGnT9yF2a"
           aria-label="Request Support"
@@ -19,6 +19,7 @@ export function AppFooter() {
           />
           Support
         </Anchor>
+        <div className="px-1 text-muted-foreground">•</div>
         <Anchor
           href="https://github.com/Greens-Organization/pz-packs"
           aria-label="View Code in Github"
