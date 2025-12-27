@@ -23,7 +23,7 @@ export function CreateModpackDialog() {
           </Button>
         }
       ></DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-125 overflow-y-auto max-h-[90vh]">
         <DialogHeader>
           <DialogTitle>Create New Modpack</DialogTitle>
           <DialogDescription>

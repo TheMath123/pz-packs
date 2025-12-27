@@ -7,7 +7,7 @@ export const createModpackFormSchema = z.object({
     .max(50, { error: 'Name must be at most 50 characters long' }),
   description: z
     .string({ error: 'Description must be a string' })
-    .max(512, { error: 'Description must be at most 512 characters long' })
+    .max(1024, { error: 'Description must be at most 1024 characters long' })
     .optional(),
   avatarUrl: z
     .url({ error: 'Invalid URL format for avatar' })

@@ -69,7 +69,7 @@ export function MyModpacksPages() {
               src={modpack.avatarUrl || ''}
               alt={modpack.name}
               width={200}
-              className="h-[200px] w-auto rounded-md"
+              className="h-50 w-auto rounded-md"
             />
           )}
           <div className="flex flex-col gap-2">
@@ -78,11 +78,14 @@ export function MyModpacksPages() {
               {modpack.isVerified && <ModpackVerifiedBadge />}
               <ModpackVisibilityBadge isPublic={modpack.isPublic} />
             </div>
-            {modpack.description && (
-              <p className="text-muted-foreground text-sm max-w-2xl">
-                {modpack.description}
+            {modpack.description?.split('\n').map((line, index) => (
+              <p
+                key={index}
+                className="text-muted-foreground text-sm max-w-2xl"
+              >
+                {line}
               </p>
-            )}
+            ))}
 
             <Members modpackId={modpack.id} canManageMembers={canManage} />
           </div>

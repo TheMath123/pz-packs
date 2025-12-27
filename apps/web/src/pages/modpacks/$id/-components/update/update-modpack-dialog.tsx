@@ -32,7 +32,7 @@ export function UpdateModpackDialog({ modpack }: UpdateModpackDialogProps) {
           </Button>
         }
       />
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-125 overflow-y-auto max-h-[90vh]">
         <DialogHeader>
           <DialogTitle>Edit Modpack</DialogTitle>
           <DialogDescription>Update your modpack information</DialogDescription>

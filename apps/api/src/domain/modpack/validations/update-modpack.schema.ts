@@ -8,7 +8,7 @@ export const updateModpackSchema = z.object({
     .optional(),
   description: z
     .string({ error: 'Description must be a string' })
-    .max(500, { error: 'Description must be at most 500 characters long' })
+    .max(1024, { error: 'Description must be at most 1024 characters long' })
     .optional(),
   avatarUrl: z.url({ error: 'Invalid URL format for avatar' }).optional(),
   isPublic: z

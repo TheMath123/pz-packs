@@ -18,7 +18,7 @@ export function TextAreaField({
   label,
   placeholder,
   description,
-  maxLength = 512,
+  maxLength = 1024,
   rows = 6,
   ...inputProps
 }: TextAreaFieldProps) {
