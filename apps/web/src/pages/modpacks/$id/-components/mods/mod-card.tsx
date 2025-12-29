@@ -1,6 +1,7 @@
 import { Card, CardTitle } from '@org/design-system/components/ui/card'
 import { useTheme } from '@org/design-system/providers'
 import { Link } from '@tanstack/react-router'
+import { UpdateModDialog } from '@/pages/mods/-components/update-mod-dialog'
 import type { IModDTO } from '@/services/mod/dtos'
 import { ModDetail } from './mod-detail'
 import { ModIdsDisplay } from './mod-ids-display'
@@ -52,13 +53,16 @@ export function ModCard({ data, modpackId, canManage }: ModCardProps) {
                 {data.name}
               </CardTitle>
             </Link>
-            {canManage && modpackId && (
-              <RemoveModDialog
-                modpackId={modpackId}
-                modId={data.id}
-                modName={data.name}
-              />
-            )}
+            <div className="flex items-center gap-1">
+              {canManage && !modpackId && <UpdateModDialog mod={data} />}
+              {canManage && modpackId && (
+                <RemoveModDialog
+                  modpackId={modpackId}
+                  modId={data.id}
+                  modName={data.name}
+                />
+              )}
+            </div>
           </div>
           <h2 className="hidden md:flex text-muted-foreground font-light text-xs flex-row items-center gap-1">
             Workshop ID:

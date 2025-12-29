@@ -67,7 +67,6 @@ export class GenerateServerFileUseCase {
         fileContent: content,
       })
     } catch (error) {
-      console.error('Failed to generate server file:', error)
       await this.modpackExportRepository.update(exportId, {
         status: 'failed',
       })

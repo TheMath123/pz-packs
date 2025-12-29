@@ -51,7 +51,6 @@ export class SteamClient {
 
       return details
     } catch (error) {
-      console.error('Erro na consulta Steam API:', error)
       throw error
     }
   }
@@ -140,7 +139,6 @@ export class SteamClient {
         collectionItems,
       }
     } catch (error) {
-      console.error('Error scraping workshop page:', error)
       throw error
     }
   }

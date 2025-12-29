@@ -23,7 +23,6 @@ export class UpsertModFromSteamUseCase {
     const scrapedInfo = await this.steamClient.scrapeWorkshopPage(workshopId)
 
     if (!steamDetails && !scrapedInfo.title) {
-      console.warn(`Mod ${workshopId} not found on Steam`)
       return null
     }
 

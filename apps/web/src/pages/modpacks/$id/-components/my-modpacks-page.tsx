@@ -36,9 +36,7 @@ export function MyModpacksPages() {
     try {
       if (navigator.share) {
         await navigator.share(shareData)
-        console.log('Content shared successfully!')
       } else {
-        console.log('Web Share API not supported in this browser.')
         navigator.clipboard.writeText(shareData.url)
         toast.custom(() => (
           <>

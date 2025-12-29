@@ -1,14 +1,20 @@
+import type { User } from '@org/auth/types'
 import { ModpackFilters } from '@/components/modpack/filters/modpack-filters'
 import { PaginationControls } from '@/components/pagination'
 import { TagFilter } from '@/components/tag-filter'
 import { useListAllMods } from '@/hooks/mod/use-list-all-mods'
 import { useFilters } from '@/hooks/use-filters'
+import { authClient } from '@/lib/auth'
 import { ModCard } from '@/pages/modpacks/$id/-components/mods/mod-card'
 import type { ModsFiltersSchema } from '../index'
+import { UpdateAllModsButton } from './update-all-mods-button'
 
 export function ModsPage() {
   const { filters, handleSearchChange, handleSortChange, handlePageChange } =
     useFilters<ModsFiltersSchema>()
+
+  const { data: session } = authClient.useSession()
+  const isAdmin = (session?.user as User)?.role === 'admin'
 
   const { data, isLoading, error } = useListAllMods(filters)
 
@@ -28,6 +34,7 @@ export function ModsPage() {
             ? `All Mods (${data?.pagination.total ?? 0})`
             : 'All Mods'}
         </h1>
+        {isAdmin && <UpdateAllModsButton />}
       </div>
 
       <ModpackFilters
@@ -52,7 +59,7 @@ export function ModsPage() {
             <ModCard
               key={item.id}
               data={item}
-              canManage={false}
+              canManage={isAdmin}
               // modpackId is optional in ModCard, if not provided, remove actions won't be shown
             />
           ))}

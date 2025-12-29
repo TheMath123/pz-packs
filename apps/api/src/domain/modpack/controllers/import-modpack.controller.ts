@@ -81,7 +81,6 @@ export class ImportModpackController {
         200,
       )
     } catch (error) {
-      console.error('Failed to enqueue import job:', error)
       return new ApiResponse(
         { error: { message: 'Failed to start import process' } },
         500,

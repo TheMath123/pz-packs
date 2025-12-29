@@ -1,7 +1,6 @@
 import Redis from 'ioredis'
 import { env } from './env'
 
-console.log(env.SECONDARY_DATABASE_URL)
 export const redisClient = new Redis(env.SECONDARY_DATABASE_URL, {
   maxRetriesPerRequest: 20,
 })

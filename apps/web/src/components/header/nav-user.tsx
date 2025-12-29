@@ -32,7 +32,6 @@ export function NavUser() {
   const { isPending, data } = authClient.useSession()
   if (isPending) return null
 
-  console.log(data)
   if (!data) {
     return (
       <Button

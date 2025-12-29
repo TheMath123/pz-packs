@@ -37,7 +37,6 @@ export class ImportModpackUseCase {
           )
           addedMods.push(...resultAddedMods)
         } catch (error) {
-          console.error(`Failed to add mod ${modWorkshopId}:`, error)
           errors.push(
             `Failed to add mod ${modWorkshopId}: ${error instanceof Error ? error.message : 'Unknown error'}`,
           )

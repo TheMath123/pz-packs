@@ -14,7 +14,6 @@ const upsertModFromSteamUseCase = new UpsertModFromSteamUseCase(
 )
 
 export const updateAllModsProcessor = async (job: Job) => {
-  console.log('Starting update all mods...')
   const { userId } = job.data
   let page = 1
   const limit = 50
@@ -37,8 +36,7 @@ export const updateAllModsProcessor = async (job: Job) => {
           })
 
           totalUpdated++
-        } catch (err) {
-          console.error(`Failed to update mod ${mod.id}:`, err)
+        } catch (_err) {
           errors++
         }
       }
@@ -56,8 +54,7 @@ export const updateAllModsProcessor = async (job: Job) => {
         isRead: false,
       })
     }
-  } catch (err) {
-    console.error('Fatal error in update all mods:', err)
+  } catch (_err) {
     if (userId) {
       await notificationRepository.create({
         title: 'Update All Mods Failed',

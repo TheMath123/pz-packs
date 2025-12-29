@@ -30,7 +30,7 @@ export const appWorker = new Worker(
       case 'update-all-mods':
         return updateAllModsProcessor(job)
       default:
-        console.warn(`Unknown job name: ${job.name}`)
+      // handle unknown job types if necessary
     }
   },
   {
@@ -38,13 +38,3 @@ export const appWorker = new Worker(
     concurrency: 10, // Global concurrency for this worker instance
   },
 )
-
-appWorker.on('completed', (job) => {
-  console.log(`[AppWorker] Job ${job.id} (${job.name}) has completed!`)
-})
-
-appWorker.on('failed', (job, err) => {
-  console.error(
-    `[AppWorker] Job ${job?.id} (${job?.name}) has failed with ${err.message}`,
-  )
-})
