@@ -1,7 +1,6 @@
 import { database } from '@org/database'
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
-import { inferAdditionalFields } from 'better-auth/client/plugins'
 import { admin as adminPlugin, openAPI } from 'better-auth/plugins'
 import { resilientCache } from './cache'
 import { env } from './env'
@@ -18,14 +17,15 @@ export const auth = betterAuth({
         user,
       },
     }),
-    inferAdditionalFields({
-      user: {
-        role: {
-          type: 'string',
-        },
-      },
-    }),
   ],
+  user: {
+    additionalFields: {
+      role: {
+        type: 'string',
+        defaultValue: 'user',
+      },
+    },
+  },
   database: drizzleAdapter(database, { provider: 'pg', usePlural: true }),
   trustedOrigins: env.ORIGIN_ALLOWED,
   advanced: { database: { generateId: false } },
