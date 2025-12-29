@@ -1,5 +1,5 @@
 {
-  "id": "53089c99-227a-46a2-9b01-1a4a230db078",
+  "id": "52f85dbf-5aa1-4c71-8b0d-acf0b806d0d9",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -832,6 +832,13 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'user'"
         },
         "created_at": {
           "name": "created_at",

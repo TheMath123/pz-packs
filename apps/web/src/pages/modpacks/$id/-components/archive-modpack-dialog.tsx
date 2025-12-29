@@ -29,15 +29,11 @@ export function ArchiveModpackDialog({ modpack }: ArchiveModpackDialogProps) {
     })
   }
 
-  // if (!modpack || modpack.id) {
-  //   return null
-  // }
-
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger
         className="aspect-square w-fit"
-        render={() => (
+        render={
           <Button
             variant="default"
             size="icon"
@@ -47,7 +43,7 @@ export function ArchiveModpackDialog({ modpack }: ArchiveModpackDialogProps) {
           >
             <TrashIcon className="w-5 h-5" weight="bold" />
           </Button>
-        )}
+        }
       />
       <AlertDialogContent>
         <AlertDialogHeader>

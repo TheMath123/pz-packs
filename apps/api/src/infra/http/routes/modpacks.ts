@@ -67,6 +67,7 @@ export function modpacksRoutes(app: Server) {
       },
       {
         auth: true,
+        permission: { resource: 'modpack', action: 'read' },
         query: listModpacksQuerySchema,
         detail: {
           tags: ['Modpacks'],
@@ -87,6 +88,7 @@ export function modpacksRoutes(app: Server) {
       },
       {
         auth: true,
+        permission: { resource: 'modpack', action: 'create' },
         body: createModpackSchema,
         detail: {
           tags: ['Modpacks'],
@@ -105,6 +107,7 @@ export function modpacksRoutes(app: Server) {
       },
       {
         auth: true,
+        permission: { resource: 'modpack', action: 'update' },
         params: modpackIdParamSchema,
         body: updateModpackSchema,
         detail: {
@@ -125,6 +128,7 @@ export function modpacksRoutes(app: Server) {
       },
       {
         auth: true,
+        permission: { resource: 'modpack', action: 'update' },
         params: modpackIdParamSchema,
         body: t.Object({
           version: t.Union([t.Literal('41x'), t.Literal('42x')]),
@@ -174,6 +178,7 @@ export function modpacksRoutes(app: Server) {
       },
       {
         auth: true,
+        permission: { resource: 'modpack', action: 'archive' },
         params: modpackIdParamSchema,
         detail: {
           tags: ['Modpacks'],

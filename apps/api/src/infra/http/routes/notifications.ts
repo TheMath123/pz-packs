@@ -15,6 +15,7 @@ export function notificationRoutes(app: Server) {
       },
       {
         auth: true,
+        permission: { resource: 'notification', action: 'read' },
         detail: {
           tags: ['Notifications'],
           description: 'List user notifications',
@@ -33,7 +34,8 @@ export function notificationRoutes(app: Server) {
       },
       {
         auth: true,
-        params: z.object({ id: z.string().uuid() }),
+        permission: { resource: 'notification', action: 'update' },
+        params: z.object({ id: z.uuid() }),
         detail: {
           tags: ['Notifications'],
           description: 'Mark a notification as read',
