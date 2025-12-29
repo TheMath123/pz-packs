@@ -39,7 +39,12 @@ export function SearchFilter({
         placeholder={placeholder}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="pr-8"
+        className="appearance-none 
+    [&::-webkit-search-cancel-button]:hidden 
+    [&::-webkit-search-decoration]:hidden 
+    [&::-webkit-search-results-button]:hidden 
+    [&::-webkit-search-results-decoration]:hidden
+    pr-8"
       />
       {search && (
         <Button

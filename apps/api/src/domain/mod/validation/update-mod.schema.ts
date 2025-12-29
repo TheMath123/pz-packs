@@ -9,6 +9,8 @@ export const updateModBodySchema = z
     mapFolders: z.array(z.string()),
     requiredMods: z.array(z.string()),
     tags: z.array(z.string()),
+    steamModId: z.array(z.string()),
+    workshopId: z.string(),
   })
   .partial()
 

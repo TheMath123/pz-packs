@@ -1,13 +1,5 @@
 import { z } from '../../zod'
 
-const splitByNewLine = (val?: string) =>
-  val
-    ? val
-        .split('\n')
-        .map((s) => s.trim())
-        .filter(Boolean)
-    : []
-
 export const updateModFormSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   description: z.string().optional(),
@@ -25,9 +17,9 @@ export const updateModFormSchema = z.object({
     })
     .optional()
     .or(z.literal('')),
-  mapFolders: z.string().optional().transform(splitByNewLine),
-  requiredMods: z.string().optional().transform(splitByNewLine),
-  steamModId: z.string().optional().transform(splitByNewLine),
+  mapFolders: z.string().optional(),
+  requiredMods: z.string().optional(),
+  steamModId: z.string().optional(),
   workshopId: z.string().optional(),
 })
 
