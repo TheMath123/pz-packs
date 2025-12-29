@@ -6,6 +6,7 @@ import {
   ArrowUpIcon,
   CaretDoubleDownIcon,
   CaretDoubleUpIcon,
+  PlaceholderIcon,
 } from '@org/design-system/components/ui/icons'
 import { useEffect, useState } from 'react'
 import { useListModpackMods } from '@/hooks/modpack/mod/use-list-modpack-mods'
@@ -137,67 +138,83 @@ export function ReorderModsList({ modpack, onClose }: ReorderModsListProps) {
 
       <div className="flex flex-col gap-2">
         {orderedMods.map((item, index) => (
-          <Card key={item.id} className="p-4 flex flex-col gap-2">
-            <div className="flex justify-between items-center">
-              <span className="font-semibold">{item.name}</span>
-              <div className="flex gap-1">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => moveMod(index, 'top')}
-                  disabled={index === 0}
-                >
-                  <CaretDoubleUpIcon className="w-4 h-4" weight="bold" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => moveMod(index, 'up')}
-                  disabled={index === 0}
-                >
-                  <ArrowUpIcon className="w-4 h-4" weight="bold" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => moveMod(index, 'down')}
-                  disabled={index === orderedMods.length - 1}
-                >
-                  <ArrowDownIcon className="w-4 h-4" weight="bold" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => moveMod(index, 'bottom')}
-                  disabled={index === orderedMods.length - 1}
-                >
-                  <CaretDoubleDownIcon className="w-4 h-4" weight="bold" />
-                </Button>
-              </div>
-            </div>
-
-            {item.steamModId && item.steamModId.length > 0 && (
-              <div className="pl-4 border-l-2 border-muted">
-                <p className="text-sm text-muted-foreground mb-2">
-                  Select Steam Mod IDs to export:
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {item.steamModId.map((id: string) => (
-                    <div key={id} className="flex items-center gap-1">
-                      <Checkbox
-                        checked={
-                          modConfig[item.id]?.selectedSteamModIds?.includes(
-                            id,
-                          ) ?? true
-                        }
-                        onCheckedChange={() => toggleSteamModId(item.id, id)}
-                      />
-                      <span className="text-sm">{id}</span>
-                    </div>
-                  ))}
-                </div>
+          <Card key={item.id} className="p-4 flex flex-row gap-4 items-start">
+            {item.avatarUrl ? (
+              <img
+                src={item.avatarUrl}
+                alt={item.name}
+                className="w-12 h-12 rounded-md"
+              />
+            ) : (
+              <div className="w-12 h-12 rounded-md bg-muted flex items-center justify-center">
+                <PlaceholderIcon
+                  className="w-6 h-6 text-muted-foreground"
+                  weight="bold"
+                />
               </div>
             )}
+            <div className="flex flex-col gap-2 w-full">
+              <div className="flex justify-between items-center">
+                <span className="font-semibold">{item.name}</span>
+                <div className="flex gap-2">
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    onClick={() => moveMod(index, 'top')}
+                    disabled={index === 0}
+                  >
+                    <CaretDoubleUpIcon className="w-4 h-4" weight="bold" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    onClick={() => moveMod(index, 'up')}
+                    disabled={index === 0}
+                  >
+                    <ArrowUpIcon className="w-4 h-4" weight="bold" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    onClick={() => moveMod(index, 'down')}
+                    disabled={index === orderedMods.length - 1}
+                  >
+                    <ArrowDownIcon className="w-4 h-4" weight="bold" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    onClick={() => moveMod(index, 'bottom')}
+                    disabled={index === orderedMods.length - 1}
+                  >
+                    <CaretDoubleDownIcon className="w-4 h-4" weight="bold" />
+                  </Button>
+                </div>
+              </div>
+
+              {item.steamModId && item.steamModId.length > 0 && (
+                <div className=" flex flex-col gap-2 pl-4 border-l-2 border-muted">
+                  <p className="text-sm text-muted-foreground">
+                    Select Mod IDs to enable:
+                  </p>
+                  <div className="flex flex-col flex-wrap gap-1">
+                    {item.steamModId.map((id: string) => (
+                      <div key={id} className="flex items-center gap-1">
+                        <Checkbox
+                          checked={
+                            modConfig[item.id]?.selectedSteamModIds?.includes(
+                              id,
+                            ) ?? true
+                          }
+                          onCheckedChange={() => toggleSteamModId(item.id, id)}
+                        />
+                        <span className="text-sm">{id}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </Card>
         ))}
       </div>
