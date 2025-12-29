@@ -1,4 +1,4 @@
-import { Checkbox as CheckboxPrimitive } from '@base-ui-components/react/checkbox'
+import { Checkbox as CheckboxPrimitive } from '@base-ui/react/checkbox'
 import { cn } from '@org/design-system/lib/utils'
 import { CheckIcon } from '@phosphor-icons/react'
 
@@ -7,16 +7,14 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
     <CheckboxPrimitive.Root
       data-slot="checkbox"
       className={cn(
-        'peer inline-flex h-6 w-11 shrink-0 cursor-pointer border-2 border-foreground items-center disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary',
+        'peer border-input dark:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 shadow-xs transition-shadow outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-2 border-border hover:shadow-sm hover:cursor-pointer rounded-xs',
         className,
       )}
       {...props}
     >
       <CheckboxPrimitive.Indicator
         data-slot="checkbox-indicator"
-        className={cn(
-          'pointer-events-none block h-4 w-4 bg-primary border-2 mx-0.5 border-foreground ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0 data-[state=checked]:bg-background',
-        )}
+        className="size-full flex items-center justify-center text-current transition-none"
       >
         <CheckIcon className="size-3.5" weight="bold" />
       </CheckboxPrimitive.Indicator>
