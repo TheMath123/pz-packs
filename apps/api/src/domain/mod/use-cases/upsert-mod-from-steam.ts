@@ -9,11 +9,11 @@ export class UpsertModFromSteamUseCase {
     private steamClient: SteamClient,
   ) {}
 
-  async execute(workshopId: string) {
+  async execute(workshopId: string, options: { forceUpdate?: boolean } = {}) {
     // Check if mod exists in DB
     let mod = await this.modRepository.findByWorkshopId(workshopId)
 
-    if (mod) {
+    if (mod && !options.forceUpdate) {
       return mod
     }
 
@@ -35,12 +35,15 @@ export class UpsertModFromSteamUseCase {
       throw new Error(`Workshop item ${workshopId} not a mod.`)
     }
 
-    const title = steamDetails?.title || scrapedInfo.title || 'Unknown Mod'
+    const title =
+      steamDetails?.title || scrapedInfo.title || mod?.name || 'Unknown Mod'
     const description =
       steamDetails?.file_description ||
       scrapedInfo.description ||
-      scrapedInfo.rawDescription?.replace(/<[^>]*>?/gm, '')
-    const image = steamDetails?.preview_url || scrapedInfo.imageURL
+      scrapedInfo.rawDescription?.replace(/<[^>]*>?/gm, '') ||
+      mod?.description
+    const image =
+      steamDetails?.preview_url || scrapedInfo.imageURL || mod?.avatarUrl
 
     // Handle Tags
     const tagIds: string[] = []
@@ -62,23 +65,28 @@ export class UpsertModFromSteamUseCase {
     }
 
     // Handle modId (can be multiple)
-    const modIds = scrapedInfo.mod_id || ['unknown']
+    const modIds = scrapedInfo.mod_id || mod?.steamModId || ['unknown']
 
-    // Create mod
-    mod = await this.modRepository.create({
+    const modData = {
       name: title,
       steamModId: modIds,
       workshopId: workshopId,
-      mapFolders: scrapedInfo.map_folder || [],
+      mapFolders: scrapedInfo.map_folder || mod?.mapFolders || [],
       requiredMods: scrapedInfo.modsRequirements
         .map((r) => r.id)
         .filter((id): id is string => !!id),
-      description: description,
+      description: description || 'No description provided.',
       steamUrl: `https://steamcommunity.com/sharedfiles/filedetails/?id=${workshopId}`,
-      avatarUrl: image,
-      highlights: highlights,
-      tags: tagIds,
-    })
+      avatarUrl: image || undefined,
+      highlights: highlights.length > 0 ? highlights : mod?.highlights || [],
+      tags: tagIds.length > 0 ? tagIds : mod?.tags.map((t) => t.id) || [],
+    }
+
+    if (mod) {
+      mod = await this.modRepository.update(mod.id, modData)
+    } else {
+      mod = await this.modRepository.create(modData)
+    }
 
     return mod
   }

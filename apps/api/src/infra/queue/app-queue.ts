@@ -4,6 +4,7 @@ import { APP_QUEUE_NAME } from './instance'
 import { modpackImportProcessor } from './processors/modpack-import'
 import { notificationProcessor } from './processors/notification'
 import { serverFileGenerationProcessor } from './processors/server-file-generation'
+import { updateAllModsProcessor } from './processors/update-all-mods'
 
 export const appWorker = new Worker(
   APP_QUEUE_NAME,
@@ -26,6 +27,8 @@ export const appWorker = new Worker(
         return modpackImportProcessor(job)
       case 'generate-server-file': // Name used in request-server-file.ts
         return serverFileGenerationProcessor(job)
+      case 'update-all-mods':
+        return updateAllModsProcessor(job)
       default:
         console.warn(`Unknown job name: ${job.name}`)
     }

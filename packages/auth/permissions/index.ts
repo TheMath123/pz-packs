@@ -1,8 +1,18 @@
 import { createAccessControl } from 'better-auth/plugins/access'
 
 const statement = {
-  modpack: ['create', 'read', 'update', 'archive'],
-  mod: ['create', 'read', 'update', 'remove'],
+  modpack: [
+    'create',
+    'read',
+    'update',
+    'archive',
+    'export',
+    'add-mod',
+    'remove-mod',
+    'import',
+    'manager-members',
+  ],
+  mod: ['create', 'read', 'update', 'remove', 'update-all'],
   notification: ['read', 'update'],
   admin: ['access'],
 } as const

@@ -1,5 +1,5 @@
+import type { User } from '@org/auth/types'
 import { modpackRepository } from '@org/database'
-import type { User } from '@/domain/types/auth'
 import { ApiResponse } from '@/utils'
 import type { ModpackIdParam, UpdateModpackSchema } from '../validations'
 

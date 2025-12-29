@@ -117,6 +117,24 @@ export class ModRepository {
     return enriched
   }
 
+  async update(
+    id: string,
+    data: Partial<CreateModData>,
+  ): Promise<ModWithTags | undefined> {
+    const [mod] = await database
+      .update(mods)
+      .set({
+        ...data,
+        updatedAt: new Date(),
+      })
+      .where(eq(mods.id, id))
+      .returning()
+
+    if (!mod) return undefined
+    const [enriched] = await this.enrichWithTags([mod])
+    return enriched
+  }
+
   async findAll(params: ListModsParams) {
     const {
       page = 1,

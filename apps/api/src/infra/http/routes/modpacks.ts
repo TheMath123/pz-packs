@@ -128,7 +128,7 @@ export function modpacksRoutes(app: Server) {
       },
       {
         auth: true,
-        permission: { resource: 'modpack', action: 'update' },
+        permission: { resource: 'modpack', action: 'export' },
         params: modpackIdParamSchema,
         body: t.Object({
           version: t.Union([t.Literal('41x'), t.Literal('42x')]),
@@ -158,6 +158,8 @@ export function modpacksRoutes(app: Server) {
         return status(res.status, res.value)
       },
       {
+        auth: true,
+        permission: { resource: 'modpack', action: 'export' },
         params: t.Object({
           exportId: t.String(),
         }),
@@ -232,6 +234,7 @@ export function modpacksRoutes(app: Server) {
       },
       {
         auth: true,
+        permission: { resource: 'modpack', action: 'manager-members' },
         params: modpackIdParamSchema,
         body: addMemberSchema,
         detail: {
@@ -255,6 +258,7 @@ export function modpacksRoutes(app: Server) {
       },
       {
         auth: true,
+        permission: { resource: 'modpack', action: 'manager-members' },
         params: modpackIdParamSchema,
         body: removeMemberSchema,
         detail: {
@@ -275,6 +279,7 @@ export function modpacksRoutes(app: Server) {
       },
       {
         auth: true,
+        permission: { resource: 'modpack', action: 'add-mod' },
         params: modpackIdParamSchema,
         body: addModInModpackSchema,
         detail: {
@@ -295,6 +300,7 @@ export function modpacksRoutes(app: Server) {
       },
       {
         auth: true,
+        permission: { resource: 'modpack', action: 'import' },
         params: modpackIdParamSchema,
         detail: {
           tags: ['Modpacks'],
@@ -333,6 +339,7 @@ export function modpacksRoutes(app: Server) {
       },
       {
         auth: true,
+        permission: { resource: 'modpack', action: 'remove-mod' },
         params: removeModpackIdParamSchema,
         detail: {
           tags: ['Mods'],
@@ -352,6 +359,7 @@ export function modpacksRoutes(app: Server) {
       },
       {
         auth: true,
+        permission: { resource: 'modpack', action: 'import' },
         params: modpackIdParamSchema,
         body: importModpackSchema,
         detail: {
