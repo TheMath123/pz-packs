@@ -173,7 +173,8 @@ export class SteamClient {
     const mapFolderLines = cleanText.matchAll(/Map Folder:\s*([^\n<]+)/gi)
     for (const match of mapFolderLines) {
       if (match[1]) {
-        const folders = match[1].split(/[,;]/)
+        // Map folders can contain commas (e.g. "Constown, KY"), so we split by semicolon only
+        const folders = match[1].split(';')
         for (const folder of folders) {
           const trimmed = folder.trim()
           if (trimmed) {
