@@ -38,6 +38,15 @@ export interface UpdateModpackData {
   steamUrl?: string | null
   isPublic?: boolean
   isActive?: boolean
+  metadata?: {
+    modsOrder: string[]
+    modConfig: Record<
+      string,
+      {
+        selectedSteamModIds: string[]
+      }
+    >
+  } | null
 }
 
 export class ModpackRepository {

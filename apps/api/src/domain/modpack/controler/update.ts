@@ -45,6 +45,7 @@ export async function updateModpackController({
     avatarUrl: body.avatarUrl,
     isPublic: body.isPublic,
     steamUrl: body.steamWorkshopUrl,
+    metadata: body.metadata,
   })
 
   return new ApiResponse(data, 200)

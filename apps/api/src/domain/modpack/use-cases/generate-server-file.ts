@@ -1,12 +1,14 @@
 import type {
   ModpackExportRepository,
   ModpackModRepository,
+  ModpackRepository,
 } from '@org/database/repository'
 
 export class GenerateServerFileUseCase {
   constructor(
     private modpackModRepository: ModpackModRepository,
     private modpackExportRepository: ModpackExportRepository,
+    private modpackRepository: ModpackRepository,
   ) {}
 
   async execute(exportId: string): Promise<void> {
@@ -17,9 +19,29 @@ export class GenerateServerFileUseCase {
     }
 
     try {
+      const modpack = await this.modpackRepository.findById(
+        exportRequest.modpackId,
+      )
+
+      if (!modpack) {
+        throw new Error('Modpack not found')
+      }
+
       const modpackMods = await this.modpackModRepository.findByModpack(
         exportRequest.modpackId,
       )
+
+      // Sort modpackMods based on metadata.modsOrder
+      if (modpack.metadata?.modsOrder) {
+        const orderMap = new Map(
+          modpack.metadata.modsOrder.map((id, index) => [id, index]),
+        )
+        modpackMods.sort((a, b) => {
+          const indexA = orderMap.get(a.modId) ?? Infinity
+          const indexB = orderMap.get(b.modId) ?? Infinity
+          return indexA - indexB
+        })
+      }
 
       const mods: string[] = []
       const maps: string[] = []
@@ -27,6 +49,27 @@ export class GenerateServerFileUseCase {
 
       for (const item of modpackMods) {
         if (!item.mod) continue
+
+        const modId = item.mod.id
+        const config = modpack.metadata?.modConfig?.[modId]
+
+        let steamModIds = item.mod.steamModId || []
+
+        // Filter steamModIds if config exists
+        if (config?.selectedSteamModIds) {
+          steamModIds = steamModIds.filter((id) =>
+            config.selectedSteamModIds.includes(id),
+          )
+        }
+
+        // If original had steamModIds but now empty (all deselected), skip this mod entirely
+        if (
+          item.mod.steamModId &&
+          item.mod.steamModId.length > 0 &&
+          steamModIds.length === 0
+        ) {
+          continue
+        }
 
         // Workshop Items
         if (item.mod.workshopId) {
@@ -39,13 +82,13 @@ export class GenerateServerFileUseCase {
         }
 
         // Mods
-        if (item.mod.steamModId && item.mod.steamModId.length > 0) {
+        if (steamModIds.length > 0) {
           if (exportRequest.version === '42x') {
             // v42 format: \ModID
-            mods.push(...item.mod.steamModId.map((id) => `\\${id}`))
+            mods.push(...steamModIds.map((id) => `\\${id}`))
           } else {
             // v41 format: ModID
-            mods.push(...item.mod.steamModId)
+            mods.push(...steamModIds)
           }
         }
       }

@@ -1,5 +1,12 @@
 import { type InferSelectModel, relations } from 'drizzle-orm'
-import { boolean, pgTable, text, unique, uuid } from 'drizzle-orm/pg-core'
+import {
+  boolean,
+  jsonb,
+  pgTable,
+  text,
+  unique,
+  uuid,
+} from 'drizzle-orm/pg-core'
 import { createdAt, id, updatedAt } from '../utils/schemas-types'
 import { mods } from './mods'
 import { users } from './users'
@@ -16,6 +23,16 @@ export const modpacks = pgTable('modpacks', {
   isVerified: boolean('is_verified').default(false).notNull(),
   isPublic: boolean('is_public').default(false).notNull(),
   isActive: boolean('is_active').default(true).notNull(),
+  metadata: jsonb('metadata').$type<{
+    modsOrder: string[] // modIds in order
+    modConfig: Record<
+      string,
+      {
+        // modId -> config
+        selectedSteamModIds: string[]
+      }
+    >
+  }>(),
   createdAt,
   updatedAt,
 })

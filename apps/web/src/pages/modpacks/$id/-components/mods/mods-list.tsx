@@ -1,3 +1,5 @@
+import { Button } from '@org/design-system/components/ui/button'
+import { useState } from 'react'
 import { ModpackFilters } from '@/components/modpack/filters/modpack-filters'
 import { PaginationControls } from '@/components/pagination'
 import { TagFilter } from '@/components/tag-filter'
@@ -9,6 +11,7 @@ import type { ModsFiltersSchema } from '../../index'
 import { AddModDialog } from '../add-mod/add-mod-dialog'
 import { ImportModpackDialog } from '../import-modpack/import-modpack-dialog'
 import { ModCard } from './mod-card'
+import { ReorderModsList } from './reorder-mods-list'
 
 interface ModsListProps {
   modpack: IModpackDTO
@@ -16,6 +19,7 @@ interface ModsListProps {
 }
 
 export function ModsList({ modpack, canManage }: ModsListProps) {
+  const [isReordering, setIsReordering] = useState(false)
   const { filters, handleSearchChange, handleSortChange, handlePageChange } =
     useFilters<ModsFiltersSchema>()
 
@@ -26,6 +30,15 @@ export function ModsList({ modpack, canManage }: ModsListProps) {
     importStatus?.status === 'active' ||
     importStatus?.status === 'waiting' ||
     importStatus?.status === 'delayed'
+
+  if (isReordering) {
+    return (
+      <ReorderModsList
+        modpack={modpack}
+        onClose={() => setIsReordering(false)}
+      />
+    )
+  }
 
   if (error) {
     return (
@@ -45,6 +58,9 @@ export function ModsList({ modpack, canManage }: ModsListProps) {
         <div className="flex flex-col gap-4 items-end">
           {canManage && (
             <div className="flex gap-2 items-center">
+              <Button variant="outline" onClick={() => setIsReordering(true)}>
+                Configure Export
+              </Button>
               {isImporting ? (
                 <div className="flex items-center gap-2 px-3 py-2 bg-muted rounded-md text-sm text-muted-foreground border border-border">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />

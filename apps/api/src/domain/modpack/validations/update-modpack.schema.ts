@@ -20,6 +20,16 @@ export const updateModpackSchema = z.object({
       error: 'Invalid Steam Workshop URL format',
     })
     .optional(),
+  metadata: z
+    .object({
+      modsOrder: z.array(z.string()),
+      modConfig: z.object(
+        z.object({
+          selectedSteamModIds: z.array(z.string()),
+        }),
+      ),
+    })
+    .optional(),
 })
 
 export type UpdateModpackSchema = z.infer<typeof updateModpackSchema>

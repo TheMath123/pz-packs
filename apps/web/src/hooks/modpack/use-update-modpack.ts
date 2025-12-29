@@ -11,6 +11,7 @@ interface UpdateModpackParams {
     avatarUrl?: string
     steamUrl?: string
     isPublic?: boolean
+    metadata?: any
   }
 }
 

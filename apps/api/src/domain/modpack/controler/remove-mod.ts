@@ -130,6 +130,22 @@ export async function removeModController({
     if (name) removedModsNames.push(name)
   }
 
+  // Update metadata
+  if (modpack.metadata) {
+    const newMetadata = { ...modpack.metadata }
+    if (newMetadata.modsOrder) {
+      newMetadata.modsOrder = newMetadata.modsOrder.filter(
+        (id) => !modsToRemove.has(id),
+      )
+    }
+    if (newMetadata.modConfig) {
+      for (const idToRemove of modsToRemove) {
+        delete newMetadata.modConfig[idToRemove]
+      }
+    }
+    await modpackRepository.update(modpackId, { metadata: newMetadata })
+  }
+
   return new ApiResponse(
     {
       message: 'Mod removed successfully',
