@@ -35,7 +35,8 @@ export const betterAuthPlugin = new Elysia({ name: 'better-auth' })
             },
           })
 
-          if (!success) return status(403, { message: 'Forbidden' })
+          if (!success)
+            return status(403, { message: 'Do not have permission' })
         },
       }
     },

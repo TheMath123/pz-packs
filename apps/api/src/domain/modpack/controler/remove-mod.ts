@@ -36,7 +36,6 @@ export async function removeModController({
 
   if (!isOwner) {
     const member = await modpackMemberRepository.findMember(modpackId, user.id)
-    // TODO: Check specific permission like 'REMOVE_MOD'
     if (member?.isActive) {
       isMember = true
     }

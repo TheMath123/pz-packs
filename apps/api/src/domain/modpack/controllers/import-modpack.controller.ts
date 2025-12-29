@@ -44,7 +44,6 @@ export class ImportModpackController {
         modpackId,
         user.id,
       )
-      // TODO: Check specific permission like 'ADD_MOD' or 'IMPORT_MODPACK'
       if (member?.isActive) {
         isMember = true
       }
