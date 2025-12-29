@@ -15,7 +15,7 @@ export const createModpackFormSchema = z.object({
     .or(z.literal('')),
   steamUrl: z
     .url({
-      hostname: /^steamcommunity\.com$/,
+      hostname: /steam(community|usercontent)\.com$/,
       error: 'Invalid Steam Workshop URL format',
     })
     .optional()
