@@ -51,6 +51,7 @@ export function UpdateModForm({ mod, onSuccess }: UpdateModFormProps) {
           label="Mod Name *"
           placeholder="Mod Name"
           inputMode="text"
+          disabled={updateMod.isPending}
         />
         <TextAreaField
           form={form}
@@ -58,6 +59,8 @@ export function UpdateModForm({ mod, onSuccess }: UpdateModFormProps) {
           label="Description"
           placeholder="Mod description..."
           inputMode="text"
+          disabled={updateMod.isPending}
+          maxLength={20000}
         />
         <TextField
           form={form}
