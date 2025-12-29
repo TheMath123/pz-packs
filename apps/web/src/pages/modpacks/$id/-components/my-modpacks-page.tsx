@@ -24,7 +24,7 @@ export function MyModpacksPages() {
   const navigate = useNavigate()
   const useList = data ? useModpack : usePublicModpack
   const { data: modpack, isLoading, error } = useList(id)
-  const canManage = useCanManageModpack(modpack?.owner || '')
+  const canManage = useCanManageModpack(modpack)
 
   const handleShare = async () => {
     const shareData = {
@@ -171,14 +171,16 @@ export function MyModpacksPages() {
         </ButtonGroup>
       </div>
       <div className="relative">
-        {canManage && (
-          <div className="flex flex-row gap-2 absolute -top-16 right-0">
-            <ExportModpackDialog modpack={modpack} />
-            <UpdateModpackDialog modpack={modpack} />
-            <ArchiveModpackDialog modpack={modpack} />
-          </div>
-        )}
-        <ModsList modpack={modpack} canManage={canManage} />
+        <div className="flex flex-row gap-2 absolute -top-16 right-0">
+          {data && modpack && <ExportModpackDialog modpack={modpack} />}
+          {canManage && modpack && (
+            <>
+              <UpdateModpackDialog modpack={modpack} />
+              <ArchiveModpackDialog modpack={modpack} />
+            </>
+          )}
+        </div>
+        <ModsList modpack={modpack} canManage={canManage ?? false} />
       </div>
     </div>
   )

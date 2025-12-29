@@ -1,11 +1,17 @@
 import { authClient } from '@/lib/auth'
+import type { IModpackDTO } from '@/services/modpack/dtos'
 
-export function useCanManageModpack(ownerId: string) {
+export function useCanManageModpack(modpack?: IModpackDTO) {
   const { data: session } = authClient.useSession()
 
-  if (!session?.user?.id) {
+  if (!session?.user?.id || !modpack) {
     return false
   }
 
-  return session.user.id === ownerId
+  const isOwner = session.user.id === modpack.owner
+  const isMember = modpack.members?.some(
+    (member) => member.userId === session.user.id && member.isActive,
+  )
+
+  return isOwner || isMember
 }
