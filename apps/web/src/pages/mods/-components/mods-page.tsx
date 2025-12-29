@@ -13,8 +13,9 @@ export function ModsPage() {
   const { filters, handleSearchChange, handleSortChange, handlePageChange } =
     useFilters<ModsFiltersSchema>()
 
-  const { data: session } = authClient.useSession()
-  const isAdmin = (session?.user as User)?.role === 'admin'
+  const { data: sessionData } = authClient.useSession()
+  const user = sessionData?.user as User | undefined
+  const isAdmin = user?.role === 'admin'
 
   const { data, isLoading, error } = useListAllMods(filters)
 
