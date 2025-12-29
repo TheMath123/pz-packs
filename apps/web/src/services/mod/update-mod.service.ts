@@ -1,31 +1,28 @@
 import { env } from '@/env'
+import { headers } from '../helpers'
+import type { IModDTO } from './dtos'
 
 export interface UpdateModParams {
   id: string
-  data: {
-    name?: string
-    description?: string
-    steamUrl?: string
-    avatarUrl?: string
-    mapFolders?: string[]
-    requiredMods?: string[]
-    tags?: string[]
-  }
+  data: Partial<IModDTO>
 }
 
 export async function updateModService({ id, data }: UpdateModParams) {
-  const response = await fetch(`${env.VITE_API_URL}/mods/${id}`, {
+  const url = `${env.VITE_API_URL}/mods/${id}`
+
+  const res = await fetch(url, {
     method: 'PATCH',
     credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { ...headers },
     body: JSON.stringify(data),
   })
 
-  if (!response.ok) {
-    throw new Error('Failed to update mod')
+  const dataResponse = await res.json()
+  if (res.status !== 200) {
+    throw new Error(
+      dataResponse.message ?? 'We have a problem updating this modpack',
+    )
   }
 
-  return response.json()
+  return dataResponse as IModDTO
 }

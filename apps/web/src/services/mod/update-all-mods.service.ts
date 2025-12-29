@@ -1,14 +1,20 @@
 import { env } from '@/env'
+import { headers } from '../helpers'
 
 export async function updateAllModsService() {
-  const response = await fetch(`${env.VITE_API_URL}/mods/update-all`, {
+  const url = `${env.VITE_API_URL}/mods/update-all`
+
+  const res = await fetch(url, {
     method: 'POST',
     credentials: 'include',
+    headers: { ...headers },
   })
 
-  if (!response.ok) {
-    throw new Error('Failed to update all mods')
+  const data = await res.json()
+
+  if (res.status !== 200) {
+    throw new Error(data.error?.message ?? 'We have a problem listing the tags')
   }
 
-  return response.json()
+  return data
 }
