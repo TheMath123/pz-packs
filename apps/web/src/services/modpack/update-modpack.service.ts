@@ -22,5 +22,7 @@ export async function updateModpackService(
     )
   }
 
+  console.log(res)
+
   return dataResponse as IModpackDTO
 }

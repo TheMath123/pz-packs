@@ -1,21 +1,25 @@
-import { Button } from '@org/design-system/components/ui/button'
-import { Card } from '@org/design-system/components/ui/card'
-import { Checkbox } from '@org/design-system/components/ui/checkbox'
 import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  CaretDoubleDownIcon,
-  CaretDoubleUpIcon,
-  PlaceholderIcon,
-} from '@org/design-system/components/ui/icons'
+  closestCenter,
+  DndContext,
+  type DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
+import { Button } from '@org/design-system/components/ui/button'
 import { useEffect, useState } from 'react'
 import { useListModpackMods } from '@/hooks/modpack/mod/use-list-modpack-mods'
 import { useUpdateModpack } from '@/hooks/modpack/use-update-modpack'
 import type { IModDTO } from '@/services/mod/dtos'
-import type {
-  IModpackDTO,
-  IRelationModModpackDTO,
-} from '@/services/modpack/dtos'
+import type { IModpackDTO } from '@/services/modpack/dtos'
+import { SortableModCard } from './sortable-mod-card'
 
 interface ReorderModsListProps {
   modpack: IModpackDTO
@@ -33,6 +37,13 @@ export function ReorderModsList({ modpack, onClose }: ReorderModsListProps) {
   const [modConfig, setModConfig] = useState<
     Record<string, { selectedSteamModIds: string[] }>
   >({})
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  )
 
   useEffect(() => {
     if (modsData?.data) {
@@ -68,6 +79,19 @@ export function ReorderModsList({ modpack, onClose }: ReorderModsListProps) {
       }
     }
   }, [modsData, modpack.metadata])
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (over && active.id !== over.id) {
+      setOrderedMods((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id)
+        const newIndex = items.findIndex((item) => item.id === over.id)
+
+        return arrayMove(items, oldIndex, newIndex)
+      })
+    }
+  }
 
   const moveMod = (
     index: number,
@@ -136,88 +160,30 @@ export function ReorderModsList({ modpack, onClose }: ReorderModsListProps) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2">
-        {orderedMods.map((item, index) => (
-          <Card key={item.id} className="p-4 flex flex-row gap-4 items-start">
-            {item.avatarUrl ? (
-              <img
-                src={item.avatarUrl}
-                alt={item.name}
-                className="w-12 h-12 rounded-md"
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={orderedMods.map((m) => m.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="flex flex-col gap-2">
+            {orderedMods.map((item, index) => (
+              <SortableModCard
+                key={item.id}
+                item={item}
+                index={index}
+                total={orderedMods.length}
+                modConfig={modConfig}
+                onMove={moveMod}
+                onToggleSteamModId={toggleSteamModId}
               />
-            ) : (
-              <div className="w-12 h-12 rounded-md bg-muted flex items-center justify-center">
-                <PlaceholderIcon
-                  className="w-6 h-6 text-muted-foreground"
-                  weight="bold"
-                />
-              </div>
-            )}
-            <div className="flex flex-col gap-2 w-full">
-              <div className="flex justify-between items-center">
-                <span className="font-semibold">{item.name}</span>
-                <div className="flex gap-2">
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    onClick={() => moveMod(index, 'top')}
-                    disabled={index === 0}
-                  >
-                    <CaretDoubleUpIcon className="w-4 h-4" weight="bold" />
-                  </Button>
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    onClick={() => moveMod(index, 'up')}
-                    disabled={index === 0}
-                  >
-                    <ArrowUpIcon className="w-4 h-4" weight="bold" />
-                  </Button>
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    onClick={() => moveMod(index, 'down')}
-                    disabled={index === orderedMods.length - 1}
-                  >
-                    <ArrowDownIcon className="w-4 h-4" weight="bold" />
-                  </Button>
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    onClick={() => moveMod(index, 'bottom')}
-                    disabled={index === orderedMods.length - 1}
-                  >
-                    <CaretDoubleDownIcon className="w-4 h-4" weight="bold" />
-                  </Button>
-                </div>
-              </div>
-
-              {item.steamModId && item.steamModId.length > 0 && (
-                <div className=" flex flex-col gap-2 pl-4 border-l-2 border-muted">
-                  <p className="text-sm text-muted-foreground">
-                    Select Mod IDs to enable:
-                  </p>
-                  <div className="flex flex-col flex-wrap gap-1">
-                    {item.steamModId.map((id: string) => (
-                      <div key={id} className="flex items-center gap-1">
-                        <Checkbox
-                          checked={
-                            modConfig[item.id]?.selectedSteamModIds?.includes(
-                              id,
-                            ) ?? true
-                          }
-                          onCheckedChange={() => toggleSteamModId(item.id, id)}
-                        />
-                        <span className="text-sm">{id}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </Card>
-        ))}
-      </div>
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
     </div>
   )
 }
