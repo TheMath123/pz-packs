@@ -13,6 +13,7 @@ export function UpdateAllModsButton() {
     >
       <ArrowsClockwiseIcon
         className={`mr-2 h-4 w-4 ${updateAllMods.isPending ? 'animate-spin' : ''}`}
+        weight="bold"
       />
       {updateAllMods.isPending ? 'Updating...' : 'Update All Mods'}
     </Button>
