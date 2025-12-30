@@ -27,7 +27,17 @@ const admin = ac.newRole({
 })
 
 const user = ac.newRole({
-  modpack: ['create', 'read', 'update', 'archive'],
+  modpack: [
+    'create',
+    'read',
+    'update',
+    'archive',
+    'export',
+    'add-mod',
+    'remove-mod',
+    'import',
+    'manager-members',
+  ],
   mod: ['create', 'read', 'update', 'remove'],
   notification: ['read', 'update'],
 })
