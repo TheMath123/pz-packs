@@ -1,5 +1,5 @@
 import type { InferSelectModel } from 'drizzle-orm'
-import { boolean, pgTable, text } from 'drizzle-orm/pg-core'
+import { boolean, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 import { createdAt, id, updatedAt } from '../utils/schemas-types'
 
 export const users = pgTable('users', {
@@ -11,6 +11,9 @@ export const users = pgTable('users', {
   role: text('role', { enum: ['user', 'admin'] })
     .default('user')
     .notNull(),
+  banned: boolean('banned'),
+  banReason: text('ban_reason'),
+  banExpires: timestamp('ban_expires'),
   createdAt,
   updatedAt,
 })

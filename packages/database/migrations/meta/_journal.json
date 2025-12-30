@@ -15,6 +15,13 @@
       "when": 1767097783764,
       "tag": "0003_unknown_zaladane",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1767114671228,
+      "tag": "0004_lively_firebird",
+      "breakpoints": true
     }
   ]
 }

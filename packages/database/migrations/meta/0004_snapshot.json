@@ -1,6 +1,6 @@
 {
-  "id": "e8fa1c24-7cb8-444c-a951-4573457b0a6a",
-  "prevId": "5729b435-0b33-4364-8c6e-726f7bd19ffe",
+  "id": "83e7b924-f12b-44fe-a2df-805a72312a2e",
+  "prevId": "fd1708e0-78f4-4795-ae86-934626cb8cf4",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -350,6 +350,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": true
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -924,6 +930,24 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'user'"
+        },
+        "banned": {
+          "name": "banned",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ban_reason": {
+          "name": "ban_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ban_expires": {
+          "name": "ban_expires",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
