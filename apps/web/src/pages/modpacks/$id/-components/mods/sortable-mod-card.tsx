@@ -10,6 +10,7 @@ import {
   CaretDoubleUpIcon,
   DotsSixVerticalIcon,
 } from '@org/design-system/components/ui/icons'
+import { Label } from '@org/design-system/components/ui/label'
 import type { IModDTO } from '@/services/mod/dtos'
 
 interface SortableModCardProps {
@@ -87,15 +88,21 @@ export function SortableModCard({
             </p>
             <div className="flex flex-col flex-wrap gap-1">
               {item.steamModId.map((id: string) => (
-                <div key={id} className="flex items-center gap-1">
+                <div key={id} className="flex items-center gap-2">
                   <Checkbox
+                    id={`toggle-${id}`}
                     checked={
                       modConfig[item.id]?.selectedSteamModIds?.includes(id) ??
                       true
                     }
                     onCheckedChange={() => onToggleSteamModId(item.id, id)}
                   />
-                  <span className="text-sm">{id}</span>
+                  <Label
+                    htmlFor={`toggle-${id}`}
+                    className="text-sm break-all font-light leading-relaxed"
+                  >
+                    {id}
+                  </Label>
                 </div>
               ))}
             </div>

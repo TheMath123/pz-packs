@@ -43,7 +43,7 @@ export function NavUser() {
         }
         className="gap-2"
       >
-        Login <DiscordLogoIcon weight="bold" />
+        Sing In <DiscordLogoIcon weight="bold" />
       </Button>
     )
   }
