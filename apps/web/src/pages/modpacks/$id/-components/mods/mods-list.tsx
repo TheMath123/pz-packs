@@ -65,7 +65,7 @@ export function ModsList({
             : 'Mods'}
         </h2>
 
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center flex-wrap">
           {isAuthenticated && data && data?.pagination.total > 1 && (
             <ButtonGroup className="self-end">
               <ExportModpackDialog modpack={modpack} />
