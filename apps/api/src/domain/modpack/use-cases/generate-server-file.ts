@@ -1,4 +1,5 @@
 import type {
+  ModpackExportConfigurationRepository,
   ModpackExportRepository,
   ModpackModRepository,
   ModpackRepository,
@@ -9,6 +10,7 @@ export class GenerateServerFileUseCase {
     private modpackModRepository: ModpackModRepository,
     private modpackExportRepository: ModpackExportRepository,
     private modpackRepository: ModpackRepository,
+    private modpackExportConfigurationRepository: ModpackExportConfigurationRepository,
   ) {}
 
   async execute(exportId: string): Promise<void> {
@@ -27,15 +29,21 @@ export class GenerateServerFileUseCase {
         throw new Error('Modpack not found')
       }
 
+      const exportConfig =
+        await this.modpackExportConfigurationRepository.findByModpackAndUser(
+          exportRequest.modpackId,
+          exportRequest.userId,
+        )
+
       const modpackMods = await this.modpackModRepository.findByModpack(
         exportRequest.modpackId,
       )
 
+      const modsOrder = exportConfig?.modsOrder || modpack.metadata?.modsOrder
+
       // Sort modpackMods based on metadata.modsOrder
-      if (modpack.metadata?.modsOrder) {
-        const orderMap = new Map(
-          modpack.metadata.modsOrder.map((id, index) => [id, index]),
-        )
+      if (modsOrder) {
+        const orderMap = new Map(modsOrder.map((id, index) => [id, index]))
         modpackMods.sort((a, b) => {
           const indexA = orderMap.get(a.modId) ?? Infinity
           const indexB = orderMap.get(b.modId) ?? Infinity
@@ -51,7 +59,9 @@ export class GenerateServerFileUseCase {
         if (!item.mod) continue
 
         const modId = item.mod.id
-        const config = modpack.metadata?.modConfig?.[modId]
+        const config =
+          exportConfig?.modConfig?.[modId] ||
+          modpack.metadata?.modConfig?.[modId]
 
         let steamModIds = item.mod.steamModId || []
 

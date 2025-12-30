@@ -3,11 +3,13 @@ import { addModInModpackSchema } from '@/domain/mod/validation/add-mod-in-modpac
 import { modpackController } from '@/domain/modpack/controler'
 import { makeAddModController } from '@/domain/modpack/factories/make-add-mod-controller'
 import { makeCreateModpackController } from '@/domain/modpack/factories/make-create-modpack-controller'
+import { makeGetExportConfigurationController } from '@/domain/modpack/factories/make-get-export-configuration-controller'
 import { makeGetImportModpackStatusController } from '@/domain/modpack/factories/make-get-import-modpack-status-controller'
 import { makeGetServerFileController } from '@/domain/modpack/factories/make-get-server-file-controller'
 import { makeImportModpackController } from '@/domain/modpack/factories/make-import-modpack-controller'
 import { makeListModpacksController } from '@/domain/modpack/factories/make-list-modpacks-controller'
 import { makeRequestServerFileController } from '@/domain/modpack/factories/make-request-server-file-controller'
+import { makeSaveExportConfigurationController } from '@/domain/modpack/factories/make-save-export-configuration-controller'
 import {
   addMemberSchema,
   createModpackSchema,
@@ -17,6 +19,7 @@ import {
   modpackIdParamSchema,
   removeMemberSchema,
   removeModpackIdParamSchema,
+  saveExportConfigurationSchema,
   updateModpackSchema,
 } from '@/domain/modpack/validations'
 import type { Server } from '../server'
@@ -366,6 +369,43 @@ export function modpacksRoutes(app: Server) {
           tags: ['Modpacks'],
           description: 'Import mods from a Steam Collection to the modpack',
           summary: 'Import Modpack from Steam',
+        },
+      },
+    )
+
+    // Get export configuration
+    route.get(
+      '/:id/export-configuration',
+      async ({ status, params, user }) => {
+        const controller = makeGetExportConfigurationController()
+        const res = await controller.handle({ params, user })
+        return status(res.status, res.value)
+      },
+      {
+        auth: true,
+        params: modpackIdParamSchema,
+        detail: {
+          tags: ['Modpacks'],
+          summary: 'Get Export Configuration',
+        },
+      },
+    )
+
+    // Save export configuration
+    route.put(
+      '/:id/export-configuration',
+      async ({ status, params, body, user }) => {
+        const controller = makeSaveExportConfigurationController()
+        const res = await controller.handle({ params, body, user })
+        return status(res.status, res.value)
+      },
+      {
+        auth: true,
+        params: modpackIdParamSchema,
+        body: saveExportConfigurationSchema,
+        detail: {
+          tags: ['Modpacks'],
+          summary: 'Save Export Configuration',
         },
       },
     )

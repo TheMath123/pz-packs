@@ -16,7 +16,10 @@ import {
 import { Button } from '@org/design-system/components/ui/button'
 import { useEffect, useState } from 'react'
 import { useListModpackMods } from '@/hooks/modpack/mod/use-list-modpack-mods'
-import { useUpdateModpack } from '@/hooks/modpack/use-update-modpack'
+import {
+  useModpackExportConfiguration,
+  useSaveModpackExportConfiguration,
+} from '@/hooks/modpack-export-configuration'
 import type { IModDTO } from '@/services/mod/dtos'
 import type { IModpackDTO } from '@/services/modpack/dtos'
 import { SortableModCard } from './sortable-mod-card'
@@ -27,11 +30,15 @@ interface ReorderModsListProps {
 }
 
 export function ReorderModsList({ modpack, onClose }: ReorderModsListProps) {
-  const { data: modsData, isLoading } = useListModpackMods(
+  const { data: modsData, isLoading: isLoadingMods } = useListModpackMods(
     { limit: 1000 },
     modpack.id,
   )
-  const { mutate: updateModpack, isPending } = useUpdateModpack()
+  const { data: exportConfig, isLoading: isLoadingConfig } =
+    useModpackExportConfiguration(modpack.id)
+  const { mutate: saveConfig, isPending } = useSaveModpackExportConfiguration(
+    modpack.id,
+  )
 
   const [orderedMods, setOrderedMods] = useState<IModDTO[]>([])
   const [modConfig, setModConfig] = useState<
@@ -49,11 +56,13 @@ export function ReorderModsList({ modpack, onClose }: ReorderModsListProps) {
     if (modsData?.data) {
       const mods = [...modsData.data]
 
+      // Determine source of truth: exportConfig > modpack.metadata
+      const modsOrder = exportConfig?.modsOrder || modpack.metadata?.modsOrder
+      const config = exportConfig?.modConfig || modpack.metadata?.modConfig
+
       // Apply existing order
-      if (modpack.metadata?.modsOrder) {
-        const orderMap = new Map(
-          modpack.metadata.modsOrder.map((id, index) => [id, index]),
-        )
+      if (modsOrder) {
+        const orderMap = new Map(modsOrder.map((id, index) => [id, index]))
         mods.sort((a, b) => {
           const indexA = orderMap.get(a.id) ?? Infinity
           const indexB = orderMap.get(b.id) ?? Infinity
@@ -64,8 +73,8 @@ export function ReorderModsList({ modpack, onClose }: ReorderModsListProps) {
       setOrderedMods(mods)
 
       // Apply existing config
-      if (modpack.metadata?.modConfig) {
-        setModConfig(modpack.metadata.modConfig)
+      if (config) {
+        setModConfig(config)
       } else {
         // Initialize with all selected by default if no config
         const initialConfig: Record<string, { selectedSteamModIds: string[] }> =
@@ -78,7 +87,7 @@ export function ReorderModsList({ modpack, onClose }: ReorderModsListProps) {
         setModConfig(initialConfig)
       }
     }
-  }, [modsData, modpack.metadata])
+  }, [modsData, modpack.metadata, exportConfig])
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
@@ -126,15 +135,10 @@ export function ReorderModsList({ modpack, onClose }: ReorderModsListProps) {
 
   const handleSave = () => {
     const modsOrder = orderedMods.map((m) => m.id)
-    updateModpack(
+    saveConfig(
       {
-        id: modpack.id,
-        data: {
-          metadata: {
-            modsOrder,
-            modConfig,
-          },
-        },
+        modsOrder,
+        modConfig,
       },
       {
         onSuccess: () => {
@@ -144,7 +148,7 @@ export function ReorderModsList({ modpack, onClose }: ReorderModsListProps) {
     )
   }
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoadingMods || isLoadingConfig) return <div>Loading...</div>
 
   return (
     <div className="flex flex-col gap-4">

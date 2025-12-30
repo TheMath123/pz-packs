@@ -1,4 +1,5 @@
 export * from './mod-repository'
+export * from './modpack-export-configuration-repository'
 export * from './modpack-export-repository'
 export * from './modpack-member-repository'
 export * from './modpack-mod-repository'

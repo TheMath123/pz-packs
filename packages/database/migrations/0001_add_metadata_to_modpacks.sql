@@ -1,1 +1,0 @@
-ALTER TABLE "modpacks" ADD COLUMN "metadata" jsonb;

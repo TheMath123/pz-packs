@@ -1,4 +1,5 @@
 import {
+  ModpackExportConfigurationRepository,
   ModpackExportRepository,
   ModpackModRepository,
   ModpackRepository,
@@ -9,9 +10,12 @@ export function makeGenerateServerFileUseCase() {
   const modpackModRepository = new ModpackModRepository()
   const modpackExportRepository = new ModpackExportRepository()
   const modpackRepository = new ModpackRepository()
+  const modpackExportConfigurationRepository =
+    new ModpackExportConfigurationRepository()
   return new GenerateServerFileUseCase(
     modpackModRepository,
     modpackExportRepository,
     modpackRepository,
+    modpackExportConfigurationRepository,
   )
 }

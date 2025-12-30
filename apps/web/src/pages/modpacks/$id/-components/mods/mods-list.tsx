@@ -9,6 +9,7 @@ import { useFilters } from '@/hooks/use-filters'
 import type { IModpackDTO } from '@/services/modpack/dtos'
 import type { ModsFiltersSchema } from '../../index'
 import { AddModDialog } from '../add-mod/add-mod-dialog'
+import { ExportModpackDialog } from '../export-modpack'
 import { ImportModpackDialog } from '../import-modpack/import-modpack-dialog'
 import { ModCard } from './mod-card'
 import { ReorderModsList } from './reorder-mods-list'
@@ -16,9 +17,14 @@ import { ReorderModsList } from './reorder-mods-list'
 interface ModsListProps {
   modpack: IModpackDTO
   canManage: boolean
+  isAuthenticated?: boolean
 }
 
-export function ModsList({ modpack, canManage }: ModsListProps) {
+export function ModsList({
+  modpack,
+  canManage,
+  isAuthenticated,
+}: ModsListProps) {
   const [isReordering, setIsReordering] = useState(false)
   const { filters, handleSearchChange, handleSortChange, handlePageChange } =
     useFilters<ModsFiltersSchema>()
@@ -49,19 +55,25 @@ export function ModsList({ modpack, canManage }: ModsListProps) {
   }
   return (
     <div className="flex flex-col gap-6">
+      {isAuthenticated && data && modpack && (
+        <div className="flex justify-end gap-4">
+          <Button variant="outline" onClick={() => setIsReordering(true)}>
+            Configure Export
+          </Button>
+          <ExportModpackDialog modpack={modpack} />
+        </div>
+      )}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <h2 className="text-xl font-semibold">
           {data?.pagination && data?.pagination.total > 1
             ? `Mods (${data?.pagination.total ?? 0})`
             : 'Mods'}
         </h2>
+
         <div className="flex flex-col gap-4 items-end">
-          {canManage && (
-            <div className="flex gap-2 items-center">
-              <Button variant="outline" onClick={() => setIsReordering(true)}>
-                Configure Export
-              </Button>
-              {isImporting ? (
+          <div className="flex gap-2 items-center">
+            {canManage &&
+              (isImporting ? (
                 <div className="flex items-center gap-2 px-3 py-2 bg-muted rounded-md text-sm text-muted-foreground border border-border">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
                   Importing mods from Steam...
@@ -71,9 +83,8 @@ export function ModsList({ modpack, canManage }: ModsListProps) {
                   <ImportModpackDialog modpackId={modpack.id} />
                   <AddModDialog modpackId={modpack.id} />
                 </>
-              )}
-            </div>
-          )}
+              ))}
+          </div>
         </div>
       </div>
 

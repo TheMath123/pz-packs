@@ -172,7 +172,6 @@ export function MyModpacksPages() {
       </div>
       <div className="relative">
         <div className="flex flex-row gap-2 absolute -top-16 right-0">
-          {data && modpack && <ExportModpackDialog modpack={modpack} />}
           {canManage && modpack && (
             <>
               <UpdateModpackDialog modpack={modpack} />
@@ -180,7 +179,11 @@ export function MyModpacksPages() {
             </>
           )}
         </div>
-        <ModsList modpack={modpack} canManage={canManage ?? false} />
+        <ModsList
+          modpack={modpack}
+          canManage={canManage ?? false}
+          isAuthenticated={!!data}
+        />
       </div>
     </div>
   )
