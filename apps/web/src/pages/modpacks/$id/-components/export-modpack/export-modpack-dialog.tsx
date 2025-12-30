@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@org/design-system/components/ui/dialog'
-import { BoxArrowDownIcon } from '@org/design-system/components/ui/icons'
+import { ExportIcon } from '@org/design-system/components/ui/icons'
 import { useState } from 'react'
 import type { IModpackDTO } from '@/services/modpack/dtos'
 import { ExportModpackForm } from './export-modpack-form'
@@ -30,7 +30,7 @@ export function ExportModpackDialog({ modpack }: AddMemberDialogProps) {
             aria-label="Download server file"
             className="bg-background"
           >
-            <BoxArrowDownIcon className="h-5 w-5" weight="bold" />
+            <ExportIcon className="h-5 w-5" weight="bold" />
             Export
           </Button>
         }

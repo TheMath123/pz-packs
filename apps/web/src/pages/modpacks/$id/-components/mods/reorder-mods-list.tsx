@@ -22,6 +22,7 @@ import {
 } from '@/hooks/modpack-export-configuration'
 import type { IModDTO } from '@/services/mod/dtos'
 import type { IModpackDTO } from '@/services/modpack/dtos'
+import { ReorderModsListSkeleton } from './reorder-mods-list-skeleton'
 import { SortableModCard } from './sortable-mod-card'
 
 interface ReorderModsListProps {
@@ -148,7 +149,8 @@ export function ReorderModsList({ modpack, onClose }: ReorderModsListProps) {
     )
   }
 
-  if (isLoadingMods || isLoadingConfig) return <div>Loading...</div>
+  if (isLoadingMods || isLoadingConfig)
+    return <ReorderModsListSkeleton onClose={onClose} />
 
   return (
     <div className="flex flex-col gap-4">
@@ -159,7 +161,7 @@ export function ReorderModsList({ modpack, onClose }: ReorderModsListProps) {
             Cancel
           </Button>
           <Button onClick={handleSave} disabled={isPending}>
-            Save Configuration
+            Save
           </Button>
         </div>
       </div>

@@ -4,7 +4,7 @@ import { cn } from '@org/design-system/lib/utils'
 import { cva, type VariantProps } from 'class-variance-authority'
 
 const buttonVariants = cva(
-  'font-head transition-all rounded outline-hidden cursor-pointer duration-200 font-medium flex items-center disabled:cursor-default  disabled:hover:bg-primary disabled:active:translate-0 disabled:opacity-50 select-none justify-center',
+  'font-head transition-all rounded outline-hidden cursor-pointer duration-200 font-medium flex items-center disabled:cursor-default  disabled:hover:bg-primary disabled:active:translate-0 disabled:opacity-50 select-none justify-center disabled:hover:translate-y-0 disabled:hover:shadow-md',
   {
     variants: {
       variant: {
@@ -13,7 +13,7 @@ const buttonVariants = cva(
         secondary:
           'shadow-md hover:shadow active:shadow-none bg-secondary shadow-primary text-secondary-foreground border-2 border-border transition hover:translate-y-1 active:translate-y-2 active:translate-x-1 hover:bg-secondary-hover disabled:hover:bg-transparent',
         outline:
-          'shadow-md hover:shadow active:shadow-none bg-transparent border-2 transition hover:translate-y-1 active:translate-y-2 active:translate-x-1',
+          'shadow-md hover:shadow active:shadow-none bg-transparent border-2 transition hover:translate-y-1 active:translate-y-2 active:translate-x-1 disabled:hover:bg-transparent',
         link: 'bg-transparent hover:underline',
         ghost:
           'bg-transparent hover:bg-primary/10 disabled:hover:bg-transparent',

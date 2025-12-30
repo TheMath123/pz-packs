@@ -58,19 +58,6 @@ export function ModsList({
   }
   return (
     <div className="flex flex-col gap-6">
-      {isAuthenticated && data && data?.pagination.total > 1 && (
-        <ButtonGroup className="self-end">
-          <ExportModpackDialog modpack={modpack} />
-          <Button
-            variant="outline"
-            size="icon"
-            className="z-10 bg-background"
-            onClick={() => setIsReordering(true)}
-          >
-            <WrenchIcon className="w-5 h-5" weight="bold" />
-          </Button>
-        </ButtonGroup>
-      )}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <h2 className="text-xl font-semibold">
           {data?.pagination && data?.pagination.total > 1
@@ -78,21 +65,32 @@ export function ModsList({
             : 'Mods'}
         </h2>
 
-        <div className="flex flex-col gap-4 items-end">
-          <div className="flex gap-2 items-center">
-            {canManage &&
-              (isImporting ? (
-                <div className="flex items-center gap-2 px-3 py-2 bg-muted rounded-md text-sm text-muted-foreground border border-border">
-                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                  Importing mods from Steam...
-                </div>
-              ) : (
-                <>
-                  <ImportModpackDialog modpackId={modpack.id} />
-                  <AddModDialog modpackId={modpack.id} />
-                </>
-              ))}
-          </div>
+        <div className="flex gap-2 items-center">
+          {isAuthenticated && data && data?.pagination.total > 1 && (
+            <ButtonGroup className="self-end">
+              <ExportModpackDialog modpack={modpack} />
+              <Button
+                variant="outline"
+                size="icon"
+                className="z-10 bg-background"
+                onClick={() => setIsReordering(true)}
+              >
+                <WrenchIcon className="w-5 h-5" weight="bold" />
+              </Button>
+            </ButtonGroup>
+          )}
+          {(canManage.isOwner || canManage.isMember) &&
+            (isImporting ? (
+              <div className="flex items-center gap-2 px-3 py-2 bg-muted rounded-md text-sm text-muted-foreground border border-border">
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                Importing mods from Steam...
+              </div>
+            ) : (
+              <>
+                <ImportModpackDialog modpackId={modpack.id} />
+                <AddModDialog modpackId={modpack.id} />
+              </>
+            ))}
         </div>
       </div>
 

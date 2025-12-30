@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@org/design-system/components/ui/dialog'
-import { DownloadSimple } from '@org/design-system/components/ui/icons'
+import { ArrowSquareInIcon } from '@org/design-system/components/ui/icons'
 import { useState } from 'react'
 import { ImportModpackForm } from './import-modpack-form'
 
@@ -26,12 +26,12 @@ export function ImportModpackDialog({ modpackId }: ImportModpackDialogProps) {
             variant="outline"
             className="flex flex-row items-center tracking-wide"
           >
-            <DownloadSimple className="w-4 h-4 mr-1" weight="bold" />
+            <ArrowSquareInIcon className="w-5 h-5 mr-1" weight="bold" />
             Import from Steam
           </Button>
         }
       ></DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-125">
         <DialogHeader>
           <DialogTitle>Import Modpack</DialogTitle>
           <DialogDescription>

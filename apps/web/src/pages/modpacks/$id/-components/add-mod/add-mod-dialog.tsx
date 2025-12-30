@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@org/design-system/components/ui/dialog'
-import { PlusIcon } from '@org/design-system/components/ui/icons'
+import { FilePlusIcon } from '@org/design-system/components/ui/icons'
 import { useState } from 'react'
 import { AddModForm } from './add-mod-form'
 
@@ -23,12 +23,12 @@ export function AddModDialog({ modpackId }: AddModDialogProps) {
       <DialogTrigger
         render={
           <Button className="flex flex-row items-center tracking-wide">
-            <PlusIcon className="w-4 h-4 mr-1" weight="bold" />
+            <FilePlusIcon className="w-5 h-5 mr-1" weight="bold" />
             Add Mod
           </Button>
         }
       ></DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-125">
         <DialogHeader>
           <DialogTitle>Add Mod</DialogTitle>
           <DialogDescription>Add a mod to your modpack</DialogDescription>
