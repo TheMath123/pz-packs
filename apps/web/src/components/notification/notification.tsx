@@ -43,7 +43,7 @@ export function Notification({ data }: { data: INotificationDTO }) {
       key={data.id}
       className={cn(
         'p-4 hover:bg-muted/50 transition-all duration-200 ease-in-out cursor-pointer',
-        'flex flex-row items-start w-full gap-4 justify-between relative border-b border-border/10',
+        'flex flex-row items-start w-full gap-4 justify-between relative border-b border-border/10 dark:border-border/40',
         !data.isRead && 'bg-muted/20',
       )}
       onClick={handleClick}
