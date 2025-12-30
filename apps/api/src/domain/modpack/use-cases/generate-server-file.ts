@@ -29,11 +29,12 @@ export class GenerateServerFileUseCase {
         throw new Error('Modpack not found')
       }
 
-      const exportConfig =
-        await this.modpackExportConfigurationRepository.findByModpackAndUser(
-          exportRequest.modpackId,
-          exportRequest.userId,
-        )
+      const exportConfig = exportRequest.userId
+        ? await this.modpackExportConfigurationRepository.findByModpackAndUser(
+            exportRequest.modpackId,
+            exportRequest.userId,
+          )
+        : undefined
 
       const modpackMods = await this.modpackModRepository.findByModpack(
         exportRequest.modpackId,
