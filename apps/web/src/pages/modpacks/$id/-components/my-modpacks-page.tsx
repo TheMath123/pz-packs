@@ -13,7 +13,6 @@ import { ModpackVerifiedBadge } from '@/components/modpack/modpack-verified-badg
 import { useCanManageModpack, useModpack, usePublicModpack } from '@/hooks'
 import { authClient } from '@/lib/auth.ts'
 import { ArchiveModpackDialog } from './archive-modpack-dialog.tsx'
-import { ExportModpackDialog } from './export-modpack/export-modpack-dialog.tsx'
 import { Members } from './members/members.tsx'
 import { ModsList } from './mods/mods-list'
 import { UpdateModpackDialog } from './update/update-modpack-dialog.tsx'
@@ -128,7 +127,10 @@ export function MyModpacksPages() {
               ))}
             </article>
 
-            <Members modpackId={modpack.id} canManageMembers={canManage} />
+            <Members
+              modpackId={modpack.id}
+              canManageMembers={canManage.isOwner}
+            />
           </div>
         </div>
         <ButtonGroup>
@@ -172,7 +174,7 @@ export function MyModpacksPages() {
       </div>
       <div className="relative">
         <div className="flex flex-row gap-2 absolute -top-16 right-0">
-          {canManage && modpack && (
+          {canManage.isOwner && modpack && (
             <>
               <UpdateModpackDialog modpack={modpack} />
               <ArchiveModpackDialog modpack={modpack} />
@@ -181,7 +183,7 @@ export function MyModpacksPages() {
         </div>
         <ModsList
           modpack={modpack}
-          canManage={canManage ?? false}
+          canManage={canManage}
           isAuthenticated={!!data}
         />
       </div>

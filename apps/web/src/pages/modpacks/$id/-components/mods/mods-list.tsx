@@ -1,9 +1,12 @@
 import { Button } from '@org/design-system/components/ui/button'
+import { ButtonGroup } from '@org/design-system/components/ui/button-group'
+import { WrenchIcon } from '@org/design-system/components/ui/icons'
 import { useState } from 'react'
 import { ModpackFilters } from '@/components/modpack/filters/modpack-filters'
 import { PaginationControls } from '@/components/pagination'
 import { TagFilter } from '@/components/tag-filter'
 import { useListModpackMods } from '@/hooks/modpack/mod/use-list-modpack-mods'
+import type { CanManageModpack } from '@/hooks/modpack/use-can-manage-modpack'
 import { useImportModpackStatus } from '@/hooks/modpack/use-import-modpack-status'
 import { useFilters } from '@/hooks/use-filters'
 import type { IModpackDTO } from '@/services/modpack/dtos'
@@ -16,7 +19,7 @@ import { ReorderModsList } from './reorder-mods-list'
 
 interface ModsListProps {
   modpack: IModpackDTO
-  canManage: boolean
+  canManage: CanManageModpack
   isAuthenticated?: boolean
 }
 
@@ -55,13 +58,18 @@ export function ModsList({
   }
   return (
     <div className="flex flex-col gap-6">
-      {isAuthenticated && data && modpack && (
-        <div className="flex justify-end gap-4">
-          <Button variant="outline" onClick={() => setIsReordering(true)}>
-            Configure Export
-          </Button>
+      {isAuthenticated && data && data?.pagination.total > 1 && (
+        <ButtonGroup className="self-end">
           <ExportModpackDialog modpack={modpack} />
-        </div>
+          <Button
+            variant="outline"
+            size="icon"
+            className="z-10 bg-background"
+            onClick={() => setIsReordering(true)}
+          >
+            <WrenchIcon className="w-5 h-5" weight="bold" />
+          </Button>
+        </ButtonGroup>
       )}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <h2 className="text-xl font-semibold">
@@ -110,7 +118,7 @@ export function ModsList({
             <ModCard
               key={item.id}
               data={item}
-              canManage={canManage}
+              canManage={canManage.isOwner || canManage.isMember}
               modpackId={modpack.id}
             />
           ))}

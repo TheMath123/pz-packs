@@ -25,7 +25,11 @@ export function ExportModpackDialog({ modpack }: AddMemberDialogProps) {
       <DialogTrigger
         className={'w-fit gap-2'}
         render={
-          <Button variant="outline" aria-label="Download server file">
+          <Button
+            variant="outline"
+            aria-label="Download server file"
+            className="bg-background"
+          >
             <BoxArrowDownIcon className="h-5 w-5" weight="bold" />
             Export
           </Button>
