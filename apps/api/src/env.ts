@@ -10,4 +10,6 @@ const schema = z.object({
   STEAM_API_KEY: z.string().min(1),
 })
 
-export const env = schema.parse(process.env)
+const isProd = process.env.NODE_ENV === 'production'
+const env = schema.parse(process.env)
+export { isProd, env }

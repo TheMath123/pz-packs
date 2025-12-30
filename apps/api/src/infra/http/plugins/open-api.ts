@@ -2,8 +2,7 @@ import openapi from '@elysiajs/openapi'
 import { betterAuthOpenAPI } from '@org/auth/openapi'
 import { z } from '@org/validation/zod'
 import { Elysia } from 'elysia'
-
-const isProd = process.env.NODE_ENV === 'production'
+import { isProd } from '@/env'
 
 export const openApiPlugin = new Elysia().use(
   openapi({
