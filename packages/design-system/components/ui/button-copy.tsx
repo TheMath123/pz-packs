@@ -9,7 +9,7 @@ interface CopyButtonProps {
   textToCopy: string
   className?: string
   classNameIcon?: string
-  size?: ButtonVariants['size'] | 'iconConfig'
+  size?: ButtonVariants['size']
   variant?: ButtonVariants['variant']
   children?: React.ReactNode
   disabled?: boolean
@@ -20,7 +20,7 @@ export function CopyButton({
   textToCopy,
   className,
   classNameIcon,
-  size = 'iconConfig',
+  size = 'icon',
   variant = 'outline',
   children,
 }: CopyButtonProps) {
@@ -50,27 +50,19 @@ export function CopyButton({
       type="button"
       disabled={disabled}
       variant={variant}
-      size={size === 'iconConfig' ? 'icon' : size}
+      size={size}
       onClick={handleCopy}
       aria-label={isCopied ? 'Copiado!' : 'Copiar'}
-      className={cn(size === 'iconConfig' && 'w-6 h-6 rounded-sm', className)}
+      className={className}
     >
       {isCopied ? (
         <CheckIcon
-          className={cn(
-            size !== 'iconConfig' && children && 'mr-2',
-            'w-5 h-5',
-            classNameIcon,
-          )}
+          className={cn(children && 'mr-2', 'w-4 h-4', classNameIcon)}
           weight="bold"
         />
       ) : (
         <CopyIcon
-          className={cn(
-            size !== 'iconConfig' && children && 'mr-2',
-            'w-5 h-5',
-            classNameIcon,
-          )}
+          className={cn(children && 'mr-2', 'w-4 h-4', classNameIcon)}
           weight="bold"
         />
       )}

@@ -3,7 +3,7 @@ import { useTheme } from '@org/design-system/providers'
 import { Link, useLocation } from '@tanstack/react-router'
 import { authClient } from '@/lib/auth'
 import { Anchor } from '../anchor'
-import { NotificationPopover } from '../notification/notification-popover'
+import { NotificationPanel } from '../notification/notification-panel'
 import { NavUser } from './nav-user'
 
 export function AppHeader() {
@@ -49,7 +49,7 @@ export function AppHeader() {
           </Anchor>
         </div>
         <div className="flex items-center gap-2">
-          {session && <NotificationPopover />}
+          {session && <NotificationPanel />}
           <NavUser />
         </div>
       </div>

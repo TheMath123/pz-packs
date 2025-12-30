@@ -1,3 +1,4 @@
+import { Button } from '@org/design-system/components/ui/button'
 import {
   CheckCircleIcon,
   DownloadSimpleIcon,
@@ -11,6 +12,7 @@ import type { JSX } from 'react'
 import { useMarkNotificationAsRead } from '@/hooks/notification'
 import { ModpackService } from '@/services/modpack'
 import type { INotificationDTO } from '@/services/notification'
+import { ExportInfoSheet } from './export-info-sheet'
 
 const icons: Record<string, JSX.Element> = {
   success: <CheckCircleIcon className="w-5 h-5 text-green-500" weight="bold" />,
@@ -19,7 +21,12 @@ const icons: Record<string, JSX.Element> = {
   default: <InfoIcon className="w-5 h-5 text-blue-500" weight="bold" />,
 }
 
-export function Notification({ data }: { data: INotificationDTO }) {
+interface NotificationProps {
+  data: INotificationDTO
+  onClose?: () => void
+}
+
+export function Notification({ data, onClose }: NotificationProps) {
   const markAsRead = useMarkNotificationAsRead()
 
   const metadata = data.metadata ? JSON.parse(data.metadata) : null
@@ -63,14 +70,18 @@ export function Notification({ data }: { data: INotificationDTO }) {
           {data.content}
         </p>
         {isDownloadAction && (
-          <button
-            type="button"
-            className="flex items-center gap-2 text-xs text-blue-500 font-medium mt-1 cursor-pointer hover:bg-muted-foreground/10 py-1 px-2 rounded-md"
-            onClick={handleDownload}
-          >
-            <DownloadSimpleIcon className="w-4 h-4" weight="bold" />
-            Click to download
-          </button>
+          <div className="flex gap-2 mt-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-xs text-blue-500"
+              onClick={handleDownload}
+            >
+              <DownloadSimpleIcon className="w-4 h-4 mr-2" weight="bold" />
+              Download File
+            </Button>
+            <ExportInfoSheet exportId={metadata.exportId} onClose={onClose} />
+          </div>
         )}
         <span className="text-xs text-muted-foreground mt-1">
           {formatDistanceToNow(new Date(data.createdAt), {

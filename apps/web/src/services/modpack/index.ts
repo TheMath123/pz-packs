@@ -2,6 +2,7 @@ import { archiveModpackService } from './archive-modpack.service'
 import { createModpackService } from './create-modpack.service'
 import { downloadServerFile } from './download-server-file.service'
 import { requestServerFile } from './export-server-file.service'
+import { fetchExportFileInfo } from './fetch-export-file-info.service'
 import { getExportConfigurationService } from './get-export-configuration.service'
 import { getModpackService } from './get-modpack.service'
 import { getPublicModpackService } from './get-public-modpack.service'
@@ -22,4 +23,5 @@ export const ModpackService = {
   download: downloadServerFile,
   getExportConfiguration: getExportConfigurationService,
   saveExportConfiguration: saveExportConfigurationService,
+  exportFileInfo: fetchExportFileInfo,
 }

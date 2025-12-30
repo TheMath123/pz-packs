@@ -1,10 +1,4 @@
 import {
-  Popover,
-  PopoverContent,
-  PopoverPositioner,
-  PopoverTrigger,
-} from '@org/design-system/components/ui/popover'
-import {
   Sheet,
   SheetContent,
   SheetDescription,
@@ -12,21 +6,23 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@org/design-system/components/ui/sheet'
+import { useState } from 'react'
 import { useNotifications } from '@/hooks/notification'
 import { Notification } from './notification'
 import { NotificationButton } from './notification-button'
 
-export function NotificationPopover() {
+export function NotificationPanel() {
   const { data: notifications, isLoading } = useNotifications()
+  const [open, setOpen] = useState(false)
 
   const unreadCount = notifications?.filter((n) => !n.isRead).length || 0
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         render={<NotificationButton unreadCount={unreadCount} />}
       ></SheetTrigger>
-      <SheetContent className="w-96 p-0">
+      <SheetContent>
         <SheetHeader className="border-b">
           <SheetTitle>Notifications</SheetTitle>
           <SheetDescription>
@@ -46,7 +42,11 @@ export function NotificationPopover() {
           ) : (
             <div>
               {notifications?.map((notification) => (
-                <Notification data={notification} key={notification.id} />
+                <Notification
+                  data={notification}
+                  key={notification.id}
+                  onClose={() => setOpen(false)}
+                />
               ))}
             </div>
           )}
