@@ -25,7 +25,8 @@ export function AddMemberDialog({ modpackId, trigger }: AddMemberDialogProps) {
         <DialogHeader>
           <DialogTitle>Add Member</DialogTitle>
           <DialogDescription>
-            Add a new member to this modpack by their email address.
+            Add a new member to this modpack by their email address. This
+            discord e-mail must be associated with an existing account.
           </DialogDescription>
         </DialogHeader>
         <AddMemberForm modpackId={modpackId} onSuccess={() => setOpen(false)} />

@@ -49,10 +49,8 @@ export function RemoveMemberDialog({
           <AlertDialogTitle>Remove Member</AlertDialogTitle>
           <AlertDialogDescription>
             Are you sure you want to remove{' '}
-            <span className="font-semibold">
-              {member.user.name || member.user.email}
-            </span>{' '}
-            from this modpack?
+            <span className="font-semibold">{member.user.name}</span> from this
+            modpack?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
