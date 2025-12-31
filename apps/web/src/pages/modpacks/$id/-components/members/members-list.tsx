@@ -92,11 +92,8 @@ export function MembersList({
                   />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">
-                      {member.user.name || member.user.email}
+                      {member.user.name}
                     </p>
-                    {member.user.name && (
-                      <p className="text-xs truncate">{member.user.email}</p>
-                    )}
                   </div>
                   {canManageMembers && !member.permission.includes('owner') && (
                     <RemoveMemberDialog
